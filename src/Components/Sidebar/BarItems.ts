@@ -3,6 +3,7 @@ import {
   IconHome2,
   IconUser,
   IconSettings,
+  IconLogin,
 } from '@tabler/icons-react';
 
 export const BarItems = [
@@ -13,4 +14,6 @@ export const BarItems = [
   { icon: IconUser, label: 'Аккаунт', href: PathsDashboard.Account },
   // { icon: IconFingerprint, label: 'Security', href: Paths.Test },
   { icon: IconSettings, label: 'Настройки', href: PathsDashboard.Settings },
+  { icon: IconUser, label: 'Регистрация', href: Paths.Signup },
+  { icon: IconLogin, label: 'Авторизация', href: Paths.Login },
 ];

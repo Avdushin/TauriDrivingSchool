@@ -1,5 +1,7 @@
 use sqlx::{Error, Pool, Postgres};
 
+// pub struct DbPool(pub Pool<Postgres>);
+
 pub async fn create_tables(pool: &Pool<Postgres>) -> Result<(), Error> {
     // Создание типов
     sqlx::query(
@@ -7,7 +9,7 @@ pub async fn create_tables(pool: &Pool<Postgres>) -> Result<(), Error> {
         DO $$
         BEGIN
             IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
-                CREATE TYPE user_role AS ENUM ('user', 'teacher', 'admin', 'moderator');
+                CREATE TYPE user_role AS ENUM ('user', 'student', 'teacher', 'admin', 'moderator');
             END IF;
         END
         $$;
