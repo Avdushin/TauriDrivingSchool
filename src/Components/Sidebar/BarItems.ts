@@ -1,12 +1,8 @@
 import { Paths, PathsDashboard } from '../App/Routing/Providers/types/Paths';
 import {
   IconHome2,
-  IconDeviceDesktopAnalytics,
-  IconFingerprint,
-  IconCalendarStats,
   IconUser,
   IconSettings,
-  IconTestPipe,
 } from '@tabler/icons-react';
 
 export const BarItems = [
