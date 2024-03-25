@@ -1,0 +1,26 @@
+// //@ Colors
+// $primaryColor: cyan;
+// $blackColor: #373737;
+// $whiteColor: #ffffff;
+
+// // @ui-index -  Переменные для регулирования z-index
+// $ui-index-1: 1; // Для наползающих элементов в общем потоке
+// $ui-index-2: 2; // Для наползающих элементов в общем потоке
+// $ui-index-3: 3; // Для масок (blur, затемнение)
+// $ui-index-4: 4; // Для сайдбаров
+// $ui-index-5: 5; // Для модальных оконо (popup)
+// $ui-index-6: 6; // Для элементов, покрываюших всё
+
+//@ Global Styles
+html, body {
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+
+a {
+    color: $primaryColor;
+    text-decoration: none;
+    // &:hover {
+    //     border-bottom: 1px solid $primaryColor;
+    // }
+}

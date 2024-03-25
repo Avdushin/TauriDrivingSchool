@@ -20,6 +20,19 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": [
+    "src/**/*",
+    "src/App/**/*",
+    "src/Store/**/*",
+    "src/App/Styles/**/*",
+    "src/Components/Features/Layouts/**/*",
+    "src/Components/**/*",
+    "src/Pages/**/*",
+    "src/Utils/**/*",
+    "src/Utils/Hooks/**/*",
+    "src/Services/**/*",
+    "src/assets/img/**/*",
+    "src/assets/icons/**/*",
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

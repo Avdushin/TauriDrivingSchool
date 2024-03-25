@@ -1,0 +1,16 @@
+@import '../../App/Styles/Styles';
+
+.customLink {
+    color: $primaryColor;
+    text-decoration: none;
+}
+
+.underline {
+    color: $primaryColor;
+    text-decoration: none;
+    transition: text-decoration 0.3s ease;
+
+    &:hover {
+        border-bottom: 1px solid $primaryColor;
+    }
+}

@@ -1,0 +1,88 @@
+@use "sass:math";
+
+// Define variables for your breakpoints,
+// values must be the same as in your theme
+$mantine-breakpoint-xs: "36em";
+$mantine-breakpoint-sm: "48em";
+$mantine-breakpoint-md: "62em";
+$mantine-breakpoint-lg: "75em";
+$mantine-breakpoint-xl: "88em";
+
+//! Variables
+//@ Colors
+$primaryColor: cyan;
+$blackColor: #373737;
+$whiteColor: #ffffff;
+
+// @ui-index -  Переменные для регулирования z-index
+$ui-index-1: 1; // Для наползающих элементов в общем потоке
+$ui-index-2: 2; // Для наползающих элементов в общем потоке
+$ui-index-3: 3; // Для масок (blur, затемнение)
+$ui-index-4: 4; // Для сайдбаров
+$ui-index-5: 5; // Для модальных оконо (popup)
+$ui-index-6: 6; // Для элементов, покрываюших всё
+
+//@ Global Styles
+a {
+    color: $primaryColor;
+    text-decoration: none;
+    // &:hover {
+    //     border-bottom: 1px solid $primaryColor;
+    // }
+}
+
+
+@function rem($value) {
+  @return #{math.div(math.div($value, $value * 0 + 1), 16)}rem;
+}
+
+@mixin light {
+  [data-mantine-color-scheme="light"] & {
+    @content;
+  }
+}
+
+@mixin dark {
+  [data-mantine-color-scheme="dark"] & {
+    @content;
+  }
+}
+
+@mixin hover {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+
+  @media (hover: none) {
+    &:active {
+      @content;
+    }
+  }
+}
+
+@mixin smaller-than($breakpoint) {
+  @media (max-width: $breakpoint) {
+    @content;
+  }
+}
+
+@mixin larger-than($breakpoint) {
+  @media (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+// Add direction mixins if you need rtl support
+@mixin rtl {
+  [dir="rtl"] & {
+    @content;
+  }
+}
+
+@mixin ltr {
+  [dir="ltr"] & {
+    @content;
+  }
+}
