@@ -1,7 +1,5 @@
 use sqlx::{Error, Pool, Postgres};
 
-// pub struct DbPool(pub Pool<Postgres>);
-
 pub async fn create_tables(pool: &Pool<Postgres>) -> Result<(), Error> {
     // Создание типов
     sqlx::query(

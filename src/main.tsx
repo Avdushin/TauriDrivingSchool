@@ -2,13 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import { App } from './Components';
 import '@mantine/core/styles.css';
-import App from './App';
-
 
 const theme = createTheme({
   fontFamily: 'Open Sans, sans-serif',
-  primaryColor: 'cyan',
+  primaryColor: 'orange',
   breakpoints: {
     xs: '30em',
     sm: '48em',
