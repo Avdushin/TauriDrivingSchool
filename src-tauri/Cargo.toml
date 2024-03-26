@@ -1,8 +1,8 @@
 [package]
 name = "app"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "A Tauri App for the Argos Driving school"
+authors = ["ITDOBRO <itsdobro@gmail.com>"]
 license = ""
 repository = ""
 default-run = "app"
