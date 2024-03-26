@@ -47,6 +47,8 @@ pub async fn authenticate_user(
         (SELECT password FROM students WHERE email = $1)
         UNION
         (SELECT password FROM teachers WHERE email = $1)
+        UNION
+        (SELECT password FROM administrators WHERE email = $1)
     ";
 
     let record = sqlx::query_as::<_, (String,)>(query)
