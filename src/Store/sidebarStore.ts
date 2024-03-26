@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface SidebarStore {
+export interface SidebarStore {
   activeTab: number | undefined;
   setActiveTab: (index: number) => void;
 }

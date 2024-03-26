@@ -15,6 +15,9 @@
       "all": false,
       "dialog": {
         "all": true
+      },
+      "fs": {
+        "scope": ["$APPDATA/argos/*"]
       }
     },
     "bundle": {
@@ -27,10 +30,8 @@
       "externalBin": [],
       "icon": [
         "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
+        "icons/argos_logo.icns",
+        "icons/argos_logo.ico"
       ],
       "identifier": "com.github.avdushin",
       "longDescription": "",
@@ -59,10 +60,11 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 750,
         "resizable": true,
-        "title": "DrivingSchool",
-        "width": 800
+        "title": "Argos Driving School",
+        "width": 1200,
+        "center": true
       }
     ]
   }

@@ -1,9 +1,11 @@
-import { useState } from 'react';
 import { TextInput, PasswordInput, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { invoke } from '@tauri-apps/api/tauri';
+import { Paths } from '../../App/Routing/Providers/types/Paths';
+import { useNavigate } from 'react-router-dom';
 
 function StudentLoginForm() {
+  const Navigate = useNavigate();
   const form = useForm({
     initialValues: {
       email: '',
@@ -11,19 +13,20 @@ function StudentLoginForm() {
     },
   });
 
-  const [error, setError] = useState('');
-
   const handleSubmit = async (values: any) => {
     try {
-      const response = await invoke('authenticate_user', { ...values });
-      if (response) {
-        alert('Login successful!');
+      const result = await invoke('authenticate_user', { ...values });
+      if (result) {
+        //@ts-ignore
+        localStorage.setItem('auth', true);
+        // localStorage.setItem('user', JSON.stringify({ user: result }));
+        Navigate(Paths.Home);
+        alert('Login successful');
       } else {
-        setError('Invalid email or password');
+        alert('Login failed: Incorrect email or password');
       }
     } catch (error) {
-      console.error(error);
-      setError('Login failed. Please try again.');
+      alert(`Login error: ${error}`);
     }
   };
 
@@ -39,8 +42,9 @@ function StudentLoginForm() {
         placeholder='Password'
         {...form.getInputProps('password')}
       />
-      {error && <div style={{ color: 'red' }}>{error}</div>}{' '}
-      <Button mt={20} type='submit'>Login</Button>
+      <Button mt={20} type='submit'>
+        Login
+      </Button>
     </form>
   );
 }

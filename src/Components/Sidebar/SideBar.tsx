@@ -7,9 +7,15 @@ import { useSidebarStore } from '../../Store/sidebarStore';
 import { BarItems } from './BarItems';
 import { NavbarLink } from './NavbarLink';
 import classes from './SideBar.module.scss';
-import logo from '../../assets/react.svg';
+import logo from '../../assets/argos_logo.png';
 
 export const SideBar: FC = () => {
+  const handleLogout = () => {
+    localStorage.removeItem('auth');
+    console.log('logouted');
+    window.location.reload();
+  };
+
   const activeTab = useSidebarStore((state) => state.activeTab);
   const setActiveTab = useSidebarStore((state) => state.setActiveTab);
 
@@ -37,7 +43,12 @@ export const SideBar: FC = () => {
       </div>
 
       <Stack justify='center' gap={0}>
-        <NavbarLink icon={IconLogout} label='Logout' href={Paths.Logout} />
+        <NavbarLink
+          icon={IconLogout}
+          label='Logout'
+          href={Paths.Login}
+          onClick={handleLogout}
+        />
       </Stack>
     </nav>
   );

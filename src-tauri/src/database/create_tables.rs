@@ -88,6 +88,19 @@ pub async fn create_tables(pool: &Pool<Postgres>) -> Result<(), Error> {
     .await?;
 
     sqlx::query(
+        "CREATE TABLE IF NOT EXISTS administrators (
+            id SERIAL PRIMARY KEY,
+            username VARCHAR(100) NOT NULL,
+            email VARCHAR(100) UNIQUE NOT NULL,
+            password VARCHAR(100) NOT NULL,
+            role user_role NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );",
+    )
+    .execute(pool)
+    .await?;
+
+    sqlx::query(
         "CREATE TABLE IF NOT EXISTS student_groups (
         student_id INTEGER REFERENCES students(id) ON DELETE CASCADE,
         group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
