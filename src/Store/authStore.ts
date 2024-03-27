@@ -10,7 +10,7 @@ export interface UserData {
   source: string;
 }
 
-interface AuthStoreState {
+export interface AuthStoreState {
   user: UserData | null;
   setUser: (user: UserData | null) => void;
   login: (
@@ -20,7 +20,7 @@ interface AuthStoreState {
   fetchAndSetUserData: () => Promise<{ success: boolean; error?: string }>;
 }
 
-const useAuthStore = create<AuthStoreState>((set, get) => ({
+export const useAuthStore = create<AuthStoreState>((set, get) => ({
   user: null,
   setUser: (user) => {
     set({ user });

@@ -4,8 +4,8 @@
 mod auth;
 mod database;
 
-// use auth::auth::DbPool as authPool;
-use auth::auth::{authenticate_user, register_student, fetch_user_data, DbPool as authPool};
+use crate::database::create_tables::create_tables;
+use auth::auth::{authenticate_user, fetch_user_data, register_student, DbPool as authPool};
 
 use sqlx::postgres::PgPoolOptions;
 use std::env;
@@ -21,10 +21,11 @@ async fn main() {
         .expect("Failed to connect to the database");
 
     // Создание таблиц БД
-    if let Err(e) = database::create_tables::create_tables(&pool).await {
+    if let Err(e) = create_tables(&pool).await {
         eprintln!("Failed to create tables: {}", e);
         return;
     }
+
     // Создание администратора
     if let Err(e) = database::create_admins::create_administrator(&pool).await {
         eprintln!("Failed to create admins: {}", e);
@@ -37,8 +38,7 @@ async fn main() {
             register_student,
             authenticate_user,
             fetch_user_data,
-            ])
-
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

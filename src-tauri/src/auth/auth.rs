@@ -15,7 +15,7 @@ pub struct UserData {
     // pub source: String,
 }
 
-// Регистрация студента
+//@ Регистрация студента
 #[tauri::command]
 pub async fn register_student(pool: State<'_, DbPool>, values: Value) -> Result<(), String> {
     let username = values.get("username").unwrap().as_str().unwrap();
@@ -69,11 +69,11 @@ pub async fn authenticate_user(
     .await
     .map_err(|e| e.to_string())?;
 
-    // Проверяем, найден ли пользователь с таким email
+    //? Проверяем, найден ли пользователь с таким email
     if let Some(user_data) = user_data_option {
-        // Проверяем совпадение пароля в базе данных
+        //? Проверяем совпадение пароля в базе данных
         if verify(&password, &user_data.password).unwrap_or(false) {
-            // Если пароль совпадает, возвращаем данные пользователя без пароля
+            //? Если пароль совпадает, возвращаем данные пользователя без пароля
             return Ok(Some(UserData {
                 password: "".to_string(),
                 ..user_data
@@ -81,11 +81,11 @@ pub async fn authenticate_user(
         }
     }
 
-    // Если пользователь не найден или пароль неверен, возвращаем ошибку
+    //? Если пользователь не найден или пароль неверен, возвращаем ошибку
     Err("User not found or password incorrect".into())
 }
 
-// Получение данных ползователя по id
+//@ Получение данных ползователя по id
 #[tauri::command]
 pub async fn fetch_user_data(
     pool: State<'_, DbPool>,

@@ -11,27 +11,27 @@ pub async fn create_administrator(pool: &PgPool) -> Result<(), Error> {
     let admin_password =
         env::var("ADMIN_PASSWORD").expect("ADMIN_PASSWORD должен быть установлен в файле .env");
 
-    // Хэшируем пароль
+    //? Хэшируем пароль
     let hashed_password = match hash(&admin_password, DEFAULT_COST) {
         Ok(h) => h,
         Err(e) => return Err(sqlx::Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e))),
     };
 
-    // Проверяем, существует ли администратор с заданным именем пользователя или email
+    //? Проверяем, существует ли администратор с заданным именем пользователя или email
     let existing_admin = sqlx::query("SELECT 1 FROM administrators WHERE username = $1 OR email = $2")
         .bind(&admin_username)
         .bind(&admin_email)
         .fetch_optional(pool)
         .await?;
 
-    // Если администратор уже существует, просто выходим из функции
+    //? Если администратор уже существует, просто выходим из функции
     if existing_admin.is_some() {
         return Ok(());
     }
 
-    // Если администратор не существует, вставляем его в базу данных
+    //? Если администратор не существует, вставляем его в базу данных
     sqlx::query(
-        "INSERT INTO administrators (username, email, password, role) VALUES ($1, $2, $3, 'admin')"
+        "INSERT INTO administrators (username, email, password, role) VALUES ($1, $2, $3, 'administrator')"
     )
     .bind(&admin_username)
     .bind(&admin_email)
