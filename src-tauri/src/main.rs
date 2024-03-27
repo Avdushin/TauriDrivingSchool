@@ -4,8 +4,8 @@
 mod auth;
 mod database;
 
-use auth::auth::DbPool as authPool;
-use auth::auth::{authenticate_user, register_student};
+// use auth::auth::DbPool as authPool;
+use auth::auth::{authenticate_user, register_student, fetch_user_data, DbPool as authPool};
 
 use sqlx::postgres::PgPoolOptions;
 use std::env;
@@ -35,8 +35,10 @@ async fn main() {
         .manage(authPool(pool.clone()))
         .invoke_handler(tauri::generate_handler![
             register_student,
-            authenticate_user
-        ])
+            authenticate_user,
+            fetch_user_data,
+            ])
+
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

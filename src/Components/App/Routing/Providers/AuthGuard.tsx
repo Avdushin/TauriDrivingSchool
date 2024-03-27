@@ -1,20 +1,37 @@
+import { Paths } from './types/Paths';
+import { ReactElement, useEffect } from 'react';
+import useAuthStore from '../../../../Store/authStore';
 import { Navigate } from 'react-router-dom';
-import { Paths } from './types/Paths'; // Предполагается, что вы уже определили эти маршруты
-import { ReactElement } from 'react';
+import { LoadingOverlay } from '@mantine/core';
 
 export type TGuardProps = {
-    children: ReactElement;
-  };
+  children: ReactElement;
+};
 
 export const AuthGuard = ({ children }: TGuardProps) => {
-  // Проверяем состояние аутентификации в localStorage
-  const isAuth = JSON.parse(`${localStorage.getItem('auth')}`);
+  const isAuthLocalStorage = Boolean(localStorage.getItem('auth'));
+  const { user, fetchAndSetUserData } = useAuthStore();
 
-  if (!isAuth) {
-    // Если пользователь не авторизован, перенаправляем его на страницу логина
+  useEffect(() => {
+    if (isAuthLocalStorage && !user) {
+      fetchAndSetUserData();
+    }
+  }, [isAuthLocalStorage, user, fetchAndSetUserData]);
+
+  if (isAuthLocalStorage && !user) {
+    // Показать индикатор загрузки или вернуть null, пока идет загрузка данных пользователя
+    return <LoadingOverlay
+    visible={true}
+    zIndex={10000}
+    overlayProps={{ radius: 'lg', blur: 20 }}
+  />;
+  }
+
+  if (!isAuthLocalStorage) {
+    // Если пользователь не аутентифицирован, перенаправляем на страницу входа
     return <Navigate to={Paths.Login} />;
   }
 
-  // Если пользователь авторизован, отображаем защищенный контент
+  // Пользователь аутентифицирован, отображаем дочерние компоненты
   return children;
 };

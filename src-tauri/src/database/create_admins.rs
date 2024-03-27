@@ -1,6 +1,5 @@
 use std::env;
 use bcrypt::{hash, DEFAULT_COST};
-use log::info;
 
 use sqlx::{Error, PgPool};
 
@@ -40,6 +39,6 @@ pub async fn create_administrator(pool: &PgPool) -> Result<(), Error> {
     .execute(pool)
     .await?;
 
-    info!("Администратор успешно создан!");
+    println!("Администратор успешно создан!");
     Ok(())
 }
