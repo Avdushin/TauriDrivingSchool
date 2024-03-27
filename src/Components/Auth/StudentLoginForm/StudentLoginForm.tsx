@@ -14,16 +14,16 @@ function StudentLoginForm() {
     },
   });
 
-  const handleSubmit = async (values: any) => {
-    try {
-      await login(values.email, values.password);
+  const handleSubmit = async (values) => {
+    const { success, error } = await login(values.email, values.password);
+    if (success) {
       Navigate(Paths.Home);
       alert('Login successful');
-    } catch (error) {
-      alert(error);
+    } else {
+      alert(`Login failed: ${error}`);
     }
   };
-
+  
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <TextInput label="Email" placeholder="Email" {...form.getInputProps('email')} />

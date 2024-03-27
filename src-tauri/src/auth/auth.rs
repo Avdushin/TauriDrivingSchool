@@ -45,42 +45,43 @@ pub async fn register_student(pool: State<'_, DbPool>, values: Value) -> Result<
     Ok(())
 }
 
-// Функция аутентификации
 #[tauri::command]
 pub async fn authenticate_user(
     pool: State<'_, DbPool>,
     email: String,
     password: String,
 ) -> Result<Option<UserData>, String> {
-    let user_data = vec![
-        sqlx::query_as::<_, UserData>("SELECT password, id, username, email, 'student' as role, FROM students WHERE email = $1")
-            .bind(&email)
-            .fetch_optional(&pool.0)
-            .await,
-        sqlx::query_as::<_, UserData>("SELECT password, id, username, email, 'teacher' as role, FROM teachers WHERE email = $1")
-            .bind(&email)
-            .fetch_optional(&pool.0)
-            .await,
-        sqlx::query_as::<_, UserData>("SELECT password, id, username, email, 'administrator' as role, FROM administrators WHERE email = $1")
-            .bind(&email)
-            .fetch_optional(&pool.0)
-            .await,
-    ];
+    // Проверяем, введен ли пароль
+    if password.is_empty() {
+        return Err("Password is required".into());
+    }
 
-    for user_option in user_data {
-        if let Ok(Some(user)) = user_option {
-            if verify(&password, &user.password).is_ok() {
-                return Ok(Some(UserData {
-                    id: user.id,
-                    username: user.username,
-                    email: user.email,
-                    role: user.role,
-                    password: user.password,
-                }));
-            }
+    // Извлекаем данные пользователя из базы данных
+    let user_data_option = sqlx::query_as::<_, UserData>(
+        "SELECT id, username, email, 'student' as role, password FROM students WHERE email = $1
+         UNION ALL
+         SELECT id, username, email, 'teacher' as role, password FROM teachers WHERE email = $1
+         UNION ALL
+         SELECT id, username, email, 'administrator' as role, password FROM administrators WHERE email = $1"
+    )
+    .bind(&email)
+    .fetch_optional(&pool.0)
+    .await
+    .map_err(|e| e.to_string())?;
+
+    // Проверяем, найден ли пользователь с таким email
+    if let Some(user_data) = user_data_option {
+        // Проверяем совпадение пароля в базе данных
+        if verify(&password, &user_data.password).unwrap_or(false) {
+            // Если пароль совпадает, возвращаем данные пользователя без пароля
+            return Ok(Some(UserData {
+                password: "".to_string(),
+                ..user_data
+            }));
         }
     }
 
+    // Если пользователь не найден или пароль неверен, возвращаем ошибку
     Err("User not found or password incorrect".into())
 }
 
@@ -92,9 +93,9 @@ pub async fn fetch_user_data(
     source: String,
 ) -> Result<Option<UserData>, String> {
     let query = match source.as_str() {
-        "students" => "SELECT id, username, email, 'student' as role, password, FROM students WHERE id = $1",
-        "teachers" => "SELECT id, username, email, 'teacher' as role, password, FROM teachers WHERE id = $1",
-        "administrators" => "SELECT id, username, email, 'administrator' as role, password, FROM administrators WHERE id = $1",
+        "students" => "SELECT id, username, email, 'student' as role, password FROM students WHERE id = $1",
+        "teachers" => "SELECT id, username, email, 'teacher' as role, password FROM teachers WHERE id = $1",
+        "administrators" => "SELECT id, username, email, 'administrator' as role, password FROM administrators WHERE id = $1",
         _ => return Err("Invalid source".into()),
     };
 

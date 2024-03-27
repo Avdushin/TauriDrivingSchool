@@ -19,7 +19,7 @@ export const AuthGuard = ({ children }: TGuardProps) => {
   }, [isAuthLocalStorage, user, fetchAndSetUserData]);
 
   if (isAuthLocalStorage && !user) {
-    // Показать индикатор загрузки или вернуть null, пока идет загрузка данных пользователя
+    // return <p>loading...</p>
     return <LoadingOverlay
     visible={true}
     zIndex={10000}
@@ -28,10 +28,8 @@ export const AuthGuard = ({ children }: TGuardProps) => {
   }
 
   if (!isAuthLocalStorage) {
-    // Если пользователь не аутентифицирован, перенаправляем на страницу входа
     return <Navigate to={Paths.Login} />;
   }
 
-  // Пользователь аутентифицирован, отображаем дочерние компоненты
   return children;
 };
