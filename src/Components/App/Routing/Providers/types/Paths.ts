@@ -17,6 +17,11 @@ export enum Paths {
   
 export enum AdminPaths {
   Panel = '/apanel',
+  //? Students
+  StudentsList = '/studentslist',
+  StudentDetails = '/student/:studentId',
+  AddStudent = '/addstudent',
+  //? Teachers
   TeachersList = '/teacherslist',
   TeacherDetails = '/teacher/:teacherId',
   AddTeacher = '/addteacher'

@@ -55,7 +55,7 @@ const Routing = () => {
         { //! Admin access
           path: AdminPaths.Panel,
           element: (
-            <AuthGuard>
+            <AuthGuard isAdmin>
               <Panel />
             </AuthGuard>
           ),
@@ -63,7 +63,7 @@ const Routing = () => {
         { //! Admin access
           path: AdminPaths.TeachersList,
           element: (
-            <AuthGuard>
+            <AuthGuard isAdmin>
               <TeachersList />
             </AuthGuard>
           ),
@@ -71,7 +71,7 @@ const Routing = () => {
         { //! Admin access
           path: AdminPaths.TeacherDetails,
           element: (
-            <AuthGuard>
+            <AuthGuard isAdmin>
               <TeacherDetails />
             </AuthGuard>
           ),
@@ -79,7 +79,7 @@ const Routing = () => {
         { //! Admin access
           path: AdminPaths.AddTeacher,
           element: (
-            <AuthGuard>
+            <AuthGuard isAdmin>
               <AddTeacherForm />
             </AuthGuard>
           ),

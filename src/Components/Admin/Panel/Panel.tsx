@@ -23,6 +23,19 @@ const Panel: FC = () => {
           href={AdminPaths.AddTeacher}
         />
       </Flex>
+      <Title order={2} pt={40}>Операции над студентами</Title>
+      <Flex justify={'center'} gap={20}>
+      <AdminCard
+          title="Список студентов"
+          description="В данном разделе администратор может получить список студентов автошколы"
+          href={AdminPaths.TeachersList}
+        />
+        <AdminCard
+          title="Добавить инструктора"
+          description="В данном разделе администратор может добавить нового преподавателя в автошколу"
+          href={AdminPaths.AddTeacher}
+        />
+      </Flex>
     </Container>
   );
 };

@@ -1,7 +1,7 @@
 import { Tooltip, UnstyledButton, rem } from '@mantine/core';
-import { IconHome2 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import classes from './SideBar.module.scss';
+import { useAuthStore } from '../../Store'; // Подставьте свой путь к контексту аутентификации
 
 export interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -9,6 +9,7 @@ export interface NavbarLinkProps {
   href: string;
   active?: boolean;
   onClick?(): void;
+  adminOnly?: boolean;
 }
 
 export function NavbarLink({
@@ -17,7 +18,21 @@ export function NavbarLink({
   active,
   onClick,
   href,
+  adminOnly = false,
 }: NavbarLinkProps) {
+  const { user } = useAuthStore();
+
+  // Проверяем, является ли пользователь администратором
+  const isAdmin = user?.role === 'administrator';
+
+  // Проверяем, должен ли элемент сайдбара быть отображен для данного пользователя
+  const shouldRender = adminOnly ? isAdmin : true;
+
+  // Если элемент сайдбара должен быть скрыт, возвращаем null
+  if (!shouldRender) {
+    return null;
+  }
+
   return (
     <Tooltip label={label} position='right' transitionProps={{ duration: 0 }}>
       <UnstyledButton

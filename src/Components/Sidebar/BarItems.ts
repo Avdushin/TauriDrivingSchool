@@ -8,12 +8,10 @@ import {
   IconChessKing,
 } from '@tabler/icons-react';
 
+// Определение элементов сайдбара
 export const BarItems = [
   { icon: IconHome2, label: 'Главная', href: Paths.Home },
-  { icon: IconChessKing, label: 'Панель администратора', href: AdminPaths.Panel },
-  // { icon: IconTestPipe, label: 'Тестирование', href: PathsDashboard.Tests },
-  // { icon: IconDeviceDesktopAnalytics, label: 'Analytics', href: Paths.Test },
-  // { icon: IconCalendarStats, label: 'Releases', href: Paths.Test },
+  { icon: IconChessKing, label: 'Панель администратора', href: AdminPaths.Panel, adminOnly: true },
   { icon: IconUser, label: 'Аккаунт', href: Paths.Account },
   { icon: IconCalendarTime, label: 'Расписание', href: Paths.Timetable },
   { icon: IconSettings, label: 'Настройки', href: PathsDashboard.Settings },
