@@ -11,3 +11,7 @@ export { default as Panel } from './Admin/Panel/Panel';
 export { default as TeachersList } from './Admin/TeachersList/TeachersList';
 export { default as TeacherDetails } from './Admin/TeacherDetails/TeacherDetails';
 export { default as AddTeacherForm } from './Admin/AddTeacherForm/AddTeacherForm';
+
+
+//@ Shared Components
+export { AdminCard } from './Shared/AdminCard/AdminCard'

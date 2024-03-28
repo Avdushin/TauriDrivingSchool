@@ -1,22 +1,23 @@
 import { FC } from 'react';
-import { Card, Image, Text, Badge, Button, Group, Box } from '@mantine/core';
+import { Box, Card, Group, Text } from '@mantine/core';
 
-const AdminCard: FC = () => {
+export interface AdminCardProps {
+  title: string;
+  description: string;
+  href: string;
+}
+
+export const AdminCard: FC<AdminCardProps> = ({ title, description, href }) => {
   return (
-    <Card shadow='sm' padding='lg' radius='md' withBorder>
-      <Box component='a' href=''>
-        <Group justify='space-between' mt='md' mb='xs'>
-          <Text fw={500}>Norway Fjord Adventures</Text>
-          <Badge color='pink'>On Sale</Badge>
+    <Box component='a' href={href}>
+      <Card mt={30} shadow='sm' padding='lg' radius='md' withBorder>
+        <Group justify='space-between' mb='xs'>
+          <Text fw={500}>{title}</Text>
         </Group>
-
         <Text size='sm' c='dimmed'>
-          With Fjord Tours you can explore more of the magical fjord landscapes
-          with tours and activities on and around the fjords of Norway
+          {description}
         </Text>
-      </Box>
-    </Card>
+      </Card>
+    </Box>
   );
 };
-
-export default AdminCard;
