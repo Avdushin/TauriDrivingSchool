@@ -1,2 +1,2 @@
-pub mod create_tables;
-pub mod create_admins;
+pub(crate) mod create_tables;
+pub(crate) mod create_admins;

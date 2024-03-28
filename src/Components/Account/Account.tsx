@@ -1,8 +1,21 @@
+import { FC } from 'react';
 import { useState, useEffect } from 'react';
-import { Container, Title, Text } from '@mantine/core';
+import { Container, Title, Text, Divider } from '@mantine/core';
 import useAuthStore, { UserData } from '../../Store/authStore';
 
-export const Hero = () => {
+
+const TransliteRole = (role: string) => {
+    switch (role) {
+        case 'administrator':
+            return 'Администратор';
+        case 'teacher':
+            return 'Учитель';
+        case 'student':
+            return 'Студент';
+    }
+}
+
+const Account: FC = () => {
   const [user, setUser] = useState<UserData | null>(null);
   const { fetchAndSetUserData } = useAuthStore();
 
@@ -27,12 +40,16 @@ export const Hero = () => {
 
   return (
     <Container pt={20}>
-      <Title>Welcome {user?.username || 'Guest'}</Title>
+      <Title>Личный кабинет</Title>
+      <Divider size={2} pt={10} />
       {user && (
-        <Text>
-          Your email: {user.email}
+        <Text size='lg'>
+          Имя пользователя: {user?.username || 'Guest'}
           <br />
-          Your role: {user.role}
+          Почта: {user.email}
+          <br />
+          {/* Роль: {user.role} */}
+          Роль: {TransliteRole(user.role)}
           <br />
           Source: {user.source}
         </Text>
@@ -40,3 +57,5 @@ export const Hero = () => {
     </Container>
   );
 };
+
+export default Account;

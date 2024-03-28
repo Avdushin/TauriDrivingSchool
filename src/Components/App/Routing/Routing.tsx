@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { Paths, PathsDashboard } from './Providers/types/Paths';
 import { Layout } from '../../Layouts/Layout';
-import { Example, Hero, Home } from '../..';
+import { Example, Account, Home } from '../..';
 import { AuthGuard } from './Providers/AuthGuard';
 import { LoginPage, NotFound, RegisterPage } from '../../../Pages';
 
@@ -16,7 +16,7 @@ const Routing = () => {
           path: Paths.Root,
           element: (
             <AuthGuard>
-              <Hero />
+              <Home />
             </AuthGuard>
           ),
         },
@@ -25,6 +25,14 @@ const Routing = () => {
           element: (
             <AuthGuard>
               <Home />
+            </AuthGuard>
+          ),
+        },
+        {
+          path: Paths.Account,
+          element: (
+            <AuthGuard>
+              <Account />
             </AuthGuard>
           ),
         },

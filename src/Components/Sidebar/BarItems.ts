@@ -11,7 +11,7 @@ export const BarItems = [
   // { icon: IconTestPipe, label: 'Тестирование', href: PathsDashboard.Tests },
   // { icon: IconDeviceDesktopAnalytics, label: 'Analytics', href: Paths.Test },
   // { icon: IconCalendarStats, label: 'Releases', href: Paths.Test },
-  { icon: IconUser, label: 'Аккаунт', href: PathsDashboard.Account },
+  { icon: IconUser, label: 'Аккаунт', href: Paths.Account },
   // { icon: IconFingerprint, label: 'Security', href: Paths.Test },
   { icon: IconSettings, label: 'Настройки', href: PathsDashboard.Settings },
   { icon: IconUser, label: 'Регистрация', href: Paths.Signup },

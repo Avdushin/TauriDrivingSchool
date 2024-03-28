@@ -3,21 +3,16 @@ import { Center, Stack } from '@mantine/core';
 import { IconLogout } from '@tabler/icons-react';
 import { Paths } from '../App/Routing/Providers/types/Paths';
 import { Link } from '../Shared/Link/Link';
-import { useSidebarStore } from '../../Store/sidebarStore';
+import { useSidebarStore, useAuthStore } from '../../Store';
 import { BarItems } from './BarItems';
 import { NavbarLink } from './NavbarLink';
 import classes from './SideBar.module.scss';
 import logo from '../../assets/argos_logo.png';
 
 export const SideBar: FC = () => {
-  const handleLogout = () => {
-    localStorage.removeItem('auth');
-    console.log('logouted');
-    window.location.reload();
-  };
-
   const activeTab = useSidebarStore((state) => state.activeTab);
   const setActiveTab = useSidebarStore((state) => state.setActiveTab);
+  const { logout } = useAuthStore();
 
   const links = BarItems.map((link, index) => (
     <NavbarLink
@@ -47,7 +42,7 @@ export const SideBar: FC = () => {
           icon={IconLogout}
           label='Logout'
           href={Paths.Login}
-          onClick={handleLogout}
+          onClick={logout}
         />
       </Stack>
     </nav>

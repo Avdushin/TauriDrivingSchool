@@ -18,6 +18,7 @@ export interface AuthStoreState {
     password: string
   ) => Promise<{ success: boolean; error?: string }>;
   fetchAndSetUserData: () => Promise<{ success: boolean; error?: string }>;
+  logout: () => void;
 }
 
 export const useAuthStore = create<AuthStoreState>((set, get) => ({
@@ -65,6 +66,17 @@ export const useAuthStore = create<AuthStoreState>((set, get) => ({
       return { success: false, error: 'Failed to fetch user data' };
     }
   },
+
+  logout: async () => {
+    try {
+      localStorage.removeItem('auth');
+      console.log('logouted');
+      window.location.reload();
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
 }));
 
 export default useAuthStore;

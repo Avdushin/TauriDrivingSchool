@@ -3,10 +3,13 @@
 
 mod auth;
 mod database;
+mod user;
 
-use crate::database::create_tables::create_tables;
-use auth::auth::{authenticate_user, fetch_user_data, register_student, DbPool as authPool};
-
+use crate::{
+    auth::auth::{authenticate_user, register_student, DbPool as AuthPool},
+    database::{create_admins::create_administrator, create_tables::create_tables},
+    user::user::{fetch_user_data, DbPool as UserPool},
+};
 use sqlx::postgres::PgPoolOptions;
 use std::env;
 
@@ -20,20 +23,18 @@ async fn main() {
         .await
         .expect("Failed to connect to the database");
 
-    // Создание таблиц БД
+    // Создание таблиц БД и администратора
     if let Err(e) = create_tables(&pool).await {
         eprintln!("Failed to create tables: {}", e);
         return;
-    }
-
-    // Создание администратора
-    if let Err(e) = database::create_admins::create_administrator(&pool).await {
+    } else if let Err(e) = create_administrator(&pool).await {
         eprintln!("Failed to create admins: {}", e);
         return;
     }
 
     tauri::Builder::default()
-        .manage(authPool(pool.clone()))
+        .manage(AuthPool(pool.clone()))
+        .manage(UserPool(pool.clone()))
         .invoke_handler(tauri::generate_handler![
             register_student,
             authenticate_user,

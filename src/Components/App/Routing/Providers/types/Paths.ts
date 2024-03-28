@@ -11,6 +11,7 @@ export enum Paths {
     Login = '/login',
     Logout = '/logout',
     Users = '/api/users',
+    Account = '/account'
   }
   
   //@ Route pathes inside the application
