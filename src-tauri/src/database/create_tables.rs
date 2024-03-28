@@ -64,11 +64,12 @@ pub async fn create_tables(pool: &Pool<Postgres>) -> Result<(), Error> {
             password VARCHAR(100) NOT NULL,
             role user_role NOT NULL DEFAULT 'student',
             phone VARCHAR(20),
+            group_id INTEGER REFERENCES groups(id) ON DELETE SET NULL DEFAULT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );",
+        );"
     )
     .execute(pool)
-    .await?;
+    .await?;    
 
     sqlx::query(
         "CREATE TABLE IF NOT EXISTS teachers (

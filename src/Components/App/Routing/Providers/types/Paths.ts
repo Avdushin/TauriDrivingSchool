@@ -11,9 +11,17 @@ export enum Paths {
     Login = '/login',
     Logout = '/logout',
     Users = '/api/users',
-    Account = '/account'
+    Account = '/account',
+    Timetable = '/timetable'
   }
   
+export enum AdminPaths {
+  Panel = '/apanel',
+  TeachersList = '/teacherslist',
+  TeacherDetails = '/teacher/:teacherId',
+  AddTeacher = '/addteacher'
+}
+
   //@ Route pathes inside the application
   export enum PathsDashboard {
     Main = '/dashbord/main',
