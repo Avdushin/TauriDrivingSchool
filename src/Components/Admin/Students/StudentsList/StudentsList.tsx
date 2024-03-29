@@ -13,18 +13,18 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import { AdminPaths } from '../../App/Routing/Providers/types/Paths';
+import { AdminPaths } from '../../../App/Routing/Providers/types/Paths';
 import {
   IconUserCancel,
   IconUserFilled,
 } from '@tabler/icons-react';
 
-const TeachersList = () => {
-  const [teachers, setTeachers] = useState([]);
+const StudentsList = () => {
+  const [students, setStudents] = useState([]);
   const navigate = useNavigate();
   const items = [
     { title: 'Панель Администратора', href: AdminPaths.Panel },
-    { title: 'Список инструкторов', href: AdminPaths.TeachersList },
+    { title: 'Список студентов', href: AdminPaths.StudentsList },
   ].map((item, index) => (
     <Anchor href={item.href} key={index}>
       {item.title}
@@ -33,23 +33,22 @@ const TeachersList = () => {
 
   //@ remove
   const [modalOpened, setModalOpened] = useState(false);
-  const [teacherToDelete, setTeacherToDelete] = useState(null);
+  const [studentToDelete, setStudentToDelete] = useState(null);
 
-  const handleRemoveClick = (teacher) => {
-    setTeacherToDelete(teacher);
+  const handleRemoveClick = (student) => {
+    setStudentToDelete(student);
     setModalOpened(true);
   };
 
   const confirmRemove = async () => {
-    if (teacherToDelete) {
+    if (studentToDelete) {
       try {
-        await invoke('remove_teacher', { teacherId: teacherToDelete.id });
-        // Обновите список учителей после удаления
-        const updatedTeachers = teachers.filter(
-          (t) => t.id !== teacherToDelete.id
+        await invoke('remove_student', { studentId: studentToDelete.id });
+        const updatedTeachers = students.filter(
+          (t) => t.id !== studentToDelete.id
         );
-        setTeachers(updatedTeachers);
-        alert(`Учитель ${teacherToDelete.username} успешно уволен`);
+        setStudents(updatedTeachers);
+        alert(`Учитель ${studentToDelete.username} успешно отчислен`);
       } catch (err) {
         console.error('Failed to remove teacher:', err);
       }
@@ -60,8 +59,8 @@ const TeachersList = () => {
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
-        const data = await invoke('fetch_teachers');
-        setTeachers(data);
+        const data = await invoke('fetch_students');
+        setStudents(data);
       } catch (err) {
         console.error('Failed to fetch teachers:', err);
       }
@@ -73,7 +72,7 @@ const TeachersList = () => {
   return (
     <Container>
       <Title order={1} pt={20} pb={20}>
-        Список инструкторов
+        Список студентов
       </Title>
       <Breadcrumbs pb={20}>{items}</Breadcrumbs>
       <Modal
@@ -82,8 +81,8 @@ const TeachersList = () => {
         title='Подтвердите действие'
       >
         <Text>
-          Вы уверены, что хотите уволить сотрудника{' '}
-          <b>{teacherToDelete?.username}</b>?
+          Вы уверены, что хотите отчислить студента{' '}
+          <b>{studentToDelete?.username}</b>?
         </Text>
         <Center>
           <Button onClick={confirmRemove} color='red' mt={20}>
@@ -103,23 +102,23 @@ const TeachersList = () => {
           </Table.Tr>
         </Table.Thead>
         <tbody>
-          {teachers.map((teacher) => (
-            <Table.Tr key={teacher.id} style={{ cursor: 'pointer' }}>
-              <Table.Td>{teacher.id}</Table.Td>
-              <Table.Td>{teacher.username}</Table.Td>
-              <Table.Td>{teacher.email}</Table.Td>
-              <Table.Td>{teacher.dlc}</Table.Td>
-              <Table.Td>{teacher.phone}</Table.Td>
-              <Table.Td onClick={() => navigate(`/teacher/${teacher.id}`)}>
+          {students.map((student) => (
+            <Table.Tr key={student.id} style={{ cursor: 'pointer' }}>
+              <Table.Td>{student.id}</Table.Td>
+              <Table.Td>{student.username}</Table.Td>
+              <Table.Td>{student.email}</Table.Td>
+              <Table.Td>{student.dlc}</Table.Td>
+              <Table.Td>{student.phone}</Table.Td>
+              <Table.Td onClick={() => navigate(`/student/${student.id}`)}>
                 <Tooltip label='Профиль'>
                   <IconUserFilled></IconUserFilled>
                 </Tooltip>
               </Table.Td>
               <Table.Td>
-                <Tooltip label='Уволить'>
+                <Tooltip label='Отчислить'>
                   <IconUserCancel
                     color='red'
-                    onClick={() => handleRemoveClick(teacher)}
+                    onClick={() => handleRemoveClick(student)}
                   ></IconUserCancel>
                 </Tooltip>
               </Table.Td>
@@ -131,4 +130,4 @@ const TeachersList = () => {
   );
 };
 
-export default TeachersList;
+export default StudentsList;

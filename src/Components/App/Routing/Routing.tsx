@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { AdminPaths, Paths, PathsDashboard } from './Providers/types/Paths';
 import { Layout } from '../../Layouts/Layout';
-import { Example, Account, Home, TimeTable, AddTeacherForm, Panel, TeachersList, TeacherDetails } from '../..';
+import { Example, Account, Home, TimeTable, AddTeacherForm, Panel, TeachersList, TeacherDetails, StudentsList, StudentDetails, AddStudent, AddGroupForm } from '../..';
 import { AuthGuard } from './Providers/AuthGuard';
 import { LoginPage, NotFound, RegisterPage } from '../../../Pages';
 
@@ -81,6 +81,38 @@ const Routing = () => {
           element: (
             <AuthGuard isAdmin>
               <AddTeacherForm />
+            </AuthGuard>
+          ),
+        },
+        { //! Admin access
+          path: AdminPaths.StudentsList,
+          element: (
+            <AuthGuard isAdmin>
+              <StudentsList />
+            </AuthGuard>
+          ),
+        },
+        { //! Admin access
+          path: AdminPaths.StudentDetails,
+          element: (
+            <AuthGuard isAdmin>
+              <StudentDetails />
+            </AuthGuard>
+          ),
+        },
+        { //! Admin access
+          path: AdminPaths.AddStudent,
+          element: (
+            <AuthGuard isAdmin>
+              <AddStudent />
+            </AuthGuard>
+          ),
+        },
+        { //! Admin access
+          path: AdminPaths.AddGroup,
+          element: (
+            <AuthGuard isAdmin>
+              <AddGroupForm />
             </AuthGuard>
           ),
         },

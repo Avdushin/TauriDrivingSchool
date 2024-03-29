@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/tauri';
 import { Text, Container, Title, Flex, Divider, Breadcrumbs, Anchor } from '@mantine/core';
-import { AdminPaths } from '../../App/Routing/Providers/types/Paths';
+import { AdminPaths } from '../../../App/Routing/Providers/types/Paths';
 
 const TeacherDetails: FC = () => {
   const { teacherId } = useParams();

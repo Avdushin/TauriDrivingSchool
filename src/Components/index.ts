@@ -8,10 +8,15 @@ export { default as StudentRegistrationForm } from './Auth/StudentRegistration/S
 
 //! Admin access
 export { default as Panel } from './Admin/Panel/Panel';
-export { default as TeachersList } from './Admin/TeachersList/TeachersList';
-export { default as TeacherDetails } from './Admin/TeacherDetails/TeacherDetails';
-export { default as AddTeacherForm } from './Admin/AddTeacherForm/AddTeacherForm';
+export { default as TeachersList } from './Admin/Teachers/TeachersList/TeachersList';
+export { default as TeacherDetails } from './Admin/Teachers/TeacherDetails/TeacherDetails';
+export { default as AddTeacherForm } from './Admin/Teachers/AddTeacherForm/AddTeacherForm';
 
+export { default as StudentsList } from './Admin/Students/StudentsList/StudentsList';
+export { default as StudentDetails } from './Admin/Students/StudentDetails/StudentDetails';
+export { default as AddStudent } from './Admin/Students/AddStudent/AddStudent';
+
+export { default as AddGroupForm } from './Admin/AddGroupForm/AddGroupForm';
 
 //@ Shared Components
-export { AdminCard } from './Shared/AdminCard/AdminCard'
+export { AdminCard } from './Shared/AdminCard/AdminCard';

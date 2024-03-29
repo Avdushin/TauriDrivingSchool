@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
 import { Button, TextInput, Group, Box, Select, Anchor, Title, Breadcrumbs } from '@mantine/core';
-import { AdminPaths } from '../../App/Routing/Providers/types/Paths';
+import { AdminPaths } from '../../../App/Routing/Providers/types/Paths';
 
 const AddTeacherForm = () => {
   const [username, setUsername] = useState('');

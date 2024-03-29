@@ -28,12 +28,17 @@ const Panel: FC = () => {
       <AdminCard
           title="Список студентов"
           description="В данном разделе администратор может получить список студентов автошколы"
-          href={AdminPaths.TeachersList}
+          href={AdminPaths.StudentsList}
         />
         <AdminCard
-          title="Добавить инструктора"
-          description="В данном разделе администратор может добавить нового преподавателя в автошколу"
-          href={AdminPaths.AddTeacher}
+          title="Добавить студента"
+          description="В данном разделе администратор может добавить нового студента в автошколу"
+          href={AdminPaths.AddStudent}
+        />
+        <AdminCard
+          title="Создать группу"
+          description="В данном разделе администратор может создать новую группу"
+          href={AdminPaths.AddGroup}
         />
       </Flex>
     </Container>

@@ -83,22 +83,21 @@ pub async fn remove_teacher(pool: State<'_, DbPool>, teacher_id: i32) -> Result<
         //@ Student functions
 */
 
-#[derive(Debug, Clone, sqlx::FromRow, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct NewStudent {
     username: String,
     email: String,
     password: String,
     group_id: Option<i32>,
     phone: Option<String>,
-    created_at: Option<String>
 }
 
 #[tauri::command]
 pub async fn create_student(
     pool: State<'_, DbPool>,
-    new_student: NewStudent,
+    new_student: NewStudent
 ) -> Result<(), String> {
-    let password_hash = hash(new_student.password, DEFAULT_COST).unwrap();
+    let password_hash = hash(&new_student.password, DEFAULT_COST).unwrap_or_default();
     sqlx::query!(
         "INSERT INTO students (username, email, password, group_id, phone) VALUES ($1, $2, $3, $4, $5)",
         new_student.username,
@@ -114,29 +113,96 @@ pub async fn create_student(
     Ok(())
 }
 
-
 #[derive(Debug, Clone, sqlx::FromRow, serde::Serialize, serde::Deserialize)]
 pub struct Student {
     pub id: i32,
     pub username: String,
     pub email: String,
-    pub dlc: String,
+    pub group_id: Option<i32>,
     pub phone: Option<String>,
 }
 
+// Допустим, вы хотите получить список всех студентов
 #[tauri::command]
 pub async fn fetch_students(pool: State<'_, DbPool>) -> Result<Vec<Student>, String> {
-    sqlx::query_as::<_, Student>("SELECT id, username, email, dlc, phone FROM teachers")
+    sqlx::query_as::<_, Student>("SELECT id, username, email, group_id, phone FROM students")
         .fetch_all(&pool.0)
         .await
         .map_err(|e| e.to_string())
 }
 
+#[derive(Debug, Clone, sqlx::FromRow, serde::Serialize, serde::Deserialize)]
+pub struct StudentDetails {
+    pub id: i32,
+    pub username: String,
+    pub email: String,
+    pub phone: Option<String>,
+    // Добавляем новые поля для группы
+    pub group_id: Option<i32>,
+    pub group_name: Option<String>,
+    pub group_description: Option<String>,
+}
+
+// Получение данных конкретного студента
 #[tauri::command]
-pub async fn fetch_student_details(pool: State<'_, DbPool>, teacher_id: i32) -> Result<Student, String> {
-    sqlx::query_as::<_, Student>("SELECT id, username, email, dlc, phone FROM teachers WHERE id = $1")
-        .bind(teacher_id)
-        .fetch_one(&pool.0)
+pub async fn fetch_student_details(pool: State<'_, DbPool>, student_id: i32) -> Result<StudentDetails, String> {
+    sqlx::query_as::<_, StudentDetails>(
+        "SELECT students.id, students.username, students.email, students.phone, students.group_id, 
+        groups.name AS group_name, groups.description AS group_description
+        FROM students
+        LEFT JOIN groups ON students.group_id = groups.id
+        WHERE students.id = $1"
+    )
+    .bind(student_id)
+    .fetch_one(&pool.0)
+    .await
+    .map_err(|e| e.to_string())
+}
+// Удаление студента
+#[tauri::command]
+pub async fn remove_student(pool: State<'_, DbPool>, student_id: i32) -> Result<(), String> {
+    sqlx::query!(
+        "DELETE FROM students WHERE id = $1",
+        student_id
+    )
+    .execute(&pool.0)
+    .await
+    .map_err(|e| e.to_string())?;
+
+    Ok(())
+}
+
+#[derive(Debug, Clone, sqlx::FromRow, serde::Serialize, serde::Deserialize)]
+pub struct Group {
+    pub id: i32,
+    pub name: String,
+    pub description: Option<String>,
+}
+
+#[tauri::command]
+pub async fn fetch_groups(pool: State<'_, DbPool>) -> Result<Vec<Group>, String> {
+    sqlx::query_as::<_, Group>("SELECT id, name, description FROM groups")
+        .fetch_all(&pool.0)
         .await
         .map_err(|e| e.to_string())
+}
+
+#[derive(Debug, Clone, serde::Deserialize)]
+pub struct NewGroup {
+    pub name: String,
+    pub description: Option<String>,
+}
+
+#[tauri::command]
+pub async fn create_group(pool: State<'_, DbPool>, new_group: NewGroup) -> Result<(), String> {
+    sqlx::query!(
+        "INSERT INTO groups (name, description) VALUES ($1, $2)",
+        new_group.name,
+        new_group.description,
+    )
+    .execute(&pool.0)
+    .await
+    .map_err(|e| e.to_string())?;
+
+    Ok(())
 }
