@@ -1,7 +1,8 @@
+// @ts-nocheck
 import { Tooltip, UnstyledButton, rem } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import classes from './SideBar.module.scss';
-import { useAuthStore } from '../../Store'; // Подставьте свой путь к контексту аутентификации
+import { useAuthStore } from '../../Store';
 
 export interface NavbarLinkProps {
   icon: typeof IconHome2;

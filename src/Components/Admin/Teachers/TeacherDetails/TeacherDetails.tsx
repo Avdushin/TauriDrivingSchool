@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/tauri';

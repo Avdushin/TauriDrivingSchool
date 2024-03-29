@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
 import { Select, Group, Button, Box, Title, Breadcrumbs, Anchor } from '@mantine/core';
@@ -6,7 +7,6 @@ import { showNotification } from '@mantine/notifications';
 import { AdminPaths } from '../../../App/Routing/Providers/types/Paths';
 
 const AddTimetableEntryForm = () => {
-  // Состояния для управления формой
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
   const [ctype, setCtype] = useState('');

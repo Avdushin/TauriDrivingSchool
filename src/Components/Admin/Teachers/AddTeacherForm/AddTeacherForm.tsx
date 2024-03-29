@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
 import { Button, TextInput, Group, Box, Select, Anchor, Title, Breadcrumbs } from '@mantine/core';

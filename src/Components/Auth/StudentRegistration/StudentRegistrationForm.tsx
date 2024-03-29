@@ -5,17 +5,21 @@ import {
   Group,
   TextInput,
   PasswordInput,
-  Code,
+  Box,
+  Text,
+  Flex,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { invoke } from '@tauri-apps/api/tauri';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../App/Routing/Providers/types/Paths';
-
+import { IconCircleCheck } from '@tabler/icons-react';
+import { Link } from '../../Shared/Link/Link';
 
 function StudentRegistrationForm() {
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
+
   const form = useForm({
     initialValues: {
       username: '',
@@ -64,7 +68,10 @@ function StudentRegistrationForm() {
   return (
     <>
       <Stepper active={active}>
-        <Stepper.Step label='First step' description='Profile settings'>
+        <Stepper.Step
+          label='Аутентификация'
+          description='Аутентификационные данные'
+        >
           <TextInput
             label='Username'
             placeholder='Username'
@@ -75,9 +82,13 @@ function StudentRegistrationForm() {
             placeholder='Password'
             {...form.getInputProps('password')}
           />
+          <Text pt={20}>
+            Уже есть аккаунт? {''}
+            <Link to={Paths.Login}>Войдите!</Link>
+          </Text>
         </Stepper.Step>
 
-        <Stepper.Step label='Second step' description='Personal information'>
+        <Stepper.Step label='Контакты' description='Контактная информация'>
           <TextInput
             label='Email'
             placeholder='Email'
@@ -91,19 +102,26 @@ function StudentRegistrationForm() {
         </Stepper.Step>
 
         <Stepper.Completed>
-          Completed! Form values:
+          {/* Completed! Form values:
           <Code block mt='xl'>
             {JSON.stringify(form.values, null, 2)}
           </Code>
-          {/*//TODO Make production redirect */}
-          
+           */}
+          <Flex gap={20} justify='center'>
+            <IconCircleCheck color='green' />
+            <Text>
+              После нажатия на кнопку "
+              <Link onClick={handleSubmit}>Зарегистрироваться</Link>", ваш
+              аккаунт будет создан!
+            </Text>
+          </Flex>
         </Stepper.Completed>
       </Stepper>
 
       <Group justify='flex-end' mt='xl'>
         {active !== 0 && (
           <Button variant='default' onClick={prevStep}>
-            Back
+            Назад
           </Button>
         )}
         {active !== 2 && <Button onClick={nextStep}>Далее</Button>}
