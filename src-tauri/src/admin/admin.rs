@@ -65,6 +65,20 @@ pub async fn fetch_teacher_details(pool: State<'_, DbPool>, teacher_id: i32) -> 
         .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+pub async fn remove_teacher(pool: State<'_, DbPool>, teacher_id: i32) -> Result<(), String> {
+    sqlx::query!(
+        "DELETE FROM teachers WHERE id = $1",
+        teacher_id
+    )
+    .execute(&pool.0)
+    .await
+    .map_err(|e| e.to_string())?;
+
+    Ok(())
+}
+
+
 /*
         //@ Student functions
 */

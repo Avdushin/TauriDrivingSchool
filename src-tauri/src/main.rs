@@ -10,7 +10,7 @@ use crate::{
     auth::auth::{authenticate_user, register_student, DbPool as AuthPool},
     database::{create_admins::create_administrator, create_tables::create_tables},
     user::user::{fetch_user_data, fetch_timetable, DbPool as UserPool},
-    admin::admin::{fetch_teachers, create_teacher, fetch_teacher_details, DbPool as AdminPool}
+    admin::admin::{fetch_teachers, create_teacher, fetch_teacher_details, remove_teacher, DbPool as AdminPool}
 };
 use sqlx::postgres::PgPoolOptions;
 use std::env;
@@ -46,6 +46,7 @@ async fn main() {
             fetch_teachers,
             fetch_teacher_details,
             create_teacher,
+            remove_teacher,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
