@@ -10,9 +10,12 @@ pub struct UserData {
     pub email: String,
     pub role: String,
     pub password: String,
+    pub group_id: Option<i32>,
+    pub group_name: Option<String>,
 }
 
-//@ Получение данных ползователя по id
+
+// Получение данных пользователя по id
 #[tauri::command]
 pub async fn fetch_user_data(
     pool: State<'_, DbPool>,
@@ -20,9 +23,26 @@ pub async fn fetch_user_data(
     source: String,
 ) -> Result<Option<UserData>, String> {
     let query = match source.as_str() {
-        "students" => "SELECT id, username, email, 'student' as role, password FROM students WHERE id = $1",
-        "teachers" => "SELECT id, username, email, 'teacher' as role, password FROM teachers WHERE id = $1",
-        "administrators" => "SELECT id, username, email, 'administrator' as role, password FROM administrators WHERE id = $1",
+        "students" => {
+            r#"
+            SELECT students.id, students.username, students.email, 'student' as role, students.password, groups.id as group_id, groups.name as group_name
+            FROM students
+            LEFT JOIN groups ON students.group_id = groups.id
+            WHERE students.id = $1
+            "#
+        },
+        "teachers" => {
+            r#"
+            SELECT id, username, email, 'teacher' as role, password, NULL::INTEGER AS group_id, NULL::TEXT AS group_name 
+            FROM teachers WHERE id = $1
+            "#
+        },
+        "administrators" => {
+            r#"
+            SELECT id, username, email, 'administrator' as role, password, NULL::INTEGER AS group_id, NULL::TEXT AS group_name 
+            FROM administrators WHERE id = $1
+            "#
+        },
         _ => return Err("Invalid source".into()),
     };
 
@@ -38,22 +58,45 @@ pub async fn fetch_user_data(
 #[derive(Debug, Clone, sqlx::FromRow, serde::Serialize, serde::Deserialize)]
 pub struct TimetableEntry {
     pub id: i32,
-    pub date: String,
-    pub time: String,
-    pub class_type: String,
+    pub date: sqlx::types::chrono::NaiveDate,
+    pub time: sqlx::types::chrono::NaiveTime,
+    pub ctype: String,
     pub teacher_id: i32,
+    pub teacher_name: String,
     pub group_id: i32,
-    pub created_at: String,
+    pub group_name: String,
 }
 
-
 #[tauri::command]
-pub async fn fetch_timetable(pool: State<'_, DbPool>, group_id: i32) -> Result<Vec<TimetableEntry>, String> {
-    sqlx::query_as::<_, TimetableEntry>(
-        "SELECT * FROM timetable WHERE group_id = $1 ORDER BY date, time"
-    )
-    .bind(group_id)
-    .fetch_all(&pool.0)
-    .await
-    .map_err(|e| e.to_string())
+pub async fn fetch_timetable(
+    pool: State<'_, DbPool>,
+    group_id: i32,
+) -> Result<Vec<TimetableEntry>, String> {
+    let query = r#"
+    SELECT 
+        timetable.id, 
+        timetable.date, 
+        timetable.time, 
+        timetable.ctype, 
+        teachers.id AS teacher_id, 
+        teachers.username AS teacher_name, 
+        groups.id AS group_id, 
+        groups.name AS group_name
+    FROM 
+        timetable
+        JOIN teachers ON timetable.teacher_id = teachers.id
+        JOIN groups ON timetable.group_id = groups.id
+    WHERE 
+        timetable.group_id = $1
+    ORDER BY 
+        timetable.date, timetable.time;
+    "#;
+
+    let result = sqlx::query_as::<_, TimetableEntry>(query)
+        .bind(group_id)
+        .fetch_all(&pool.0)
+        .await
+        .map_err(|e| e.to_string())?;
+
+    Ok(result)
 }

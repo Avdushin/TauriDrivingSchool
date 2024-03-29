@@ -8,6 +8,8 @@ export interface UserData {
   role: string;
   password: string;
   source: string;
+  group_id?: number | null;
+  group_name?: string | null;
 }
 
 export interface AuthStoreState {
@@ -70,6 +72,7 @@ export const useAuthStore = create<AuthStoreState>((set, get) => ({
   logout: async () => {
     try {
       localStorage.removeItem('auth');
+      localStorage.removeItem('user');
       console.log('logouted');
       window.location.reload();
     } catch (err) {

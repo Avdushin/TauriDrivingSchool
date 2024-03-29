@@ -50,7 +50,7 @@ const StudentsList = () => {
         setStudents(updatedTeachers);
         alert(`Учитель ${studentToDelete.username} успешно отчислен`);
       } catch (err) {
-        console.error('Failed to remove teacher:', err);
+        console.error('Failed to remove student:', err);
       }
     }
     setModalOpened(false);
@@ -62,7 +62,7 @@ const StudentsList = () => {
         const data = await invoke('fetch_students');
         setStudents(data);
       } catch (err) {
-        console.error('Failed to fetch teachers:', err);
+        console.error('Failed to fetch students:', err);
       }
     };
 
@@ -97,7 +97,7 @@ const StudentsList = () => {
             <Table.Th>ID</Table.Th>
             <Table.Th>Username</Table.Th>
             <Table.Th>Email</Table.Th>
-            <Table.Th>Категория прав</Table.Th>
+            <Table.Th>Группа</Table.Th>
             <Table.Th>Телефон</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -107,7 +107,7 @@ const StudentsList = () => {
               <Table.Td>{student.id}</Table.Td>
               <Table.Td>{student.username}</Table.Td>
               <Table.Td>{student.email}</Table.Td>
-              <Table.Td>{student.dlc}</Table.Td>
+              <Table.Td>{student.group_name}</Table.Td>
               <Table.Td>{student.phone}</Table.Td>
               <Table.Td onClick={() => navigate(`/student/${student.id}`)}>
                 <Tooltip label='Профиль'>

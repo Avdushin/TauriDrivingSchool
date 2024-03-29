@@ -552,10 +552,10 @@
     react-textarea-autosize "8.5.3"
     type-fest "^4.12.0"
 
-"@mantine/dates@^7.6.2":
-  version "7.6.2"
-  resolved "https://registry.yarnpkg.com/@mantine/dates/-/dates-7.6.2.tgz#eb639d06ed43b10e0846aa4cf276bc067eb15c2e"
-  integrity sha512-0J7V06HSl0pYgCW4xqj02gilrGvCL9pTDENGCn+RruSfafJrWDB43C1/q5FFNOvj3pNGDMepCQbB2IM7nlucTw==
+"@mantine/dates@^7.7.1":
+  version "7.7.1"
+  resolved "https://registry.yarnpkg.com/@mantine/dates/-/dates-7.7.1.tgz#3bdd223ab27a4eb1b3e50f885773010d515a4a43"
+  integrity sha512-SIeC11HUTiMAExlReFYHXSkTaVjkk1i7+QvLtxJkd3lxn6X1vHuPVV4j4c9AED8oZI5QEmoVcYc/03Eud2FoAg==
   dependencies:
     clsx "2.1.0"
 
@@ -577,18 +577,18 @@
   resolved "https://registry.yarnpkg.com/@mantine/modals/-/modals-7.6.2.tgz#bbd7964c9ab305911cbfc8adab3289d79fd93dee"
   integrity sha512-k+lrq+ZTBobP1oNzKEiBtYeefc3wsQjx/T+29SF+m3pir9bqZZ0/0IbEIUMFyqYKhhMjB8DU9+tq5NAPqri7Vg==
 
-"@mantine/notifications@^7.6.2":
-  version "7.6.2"
-  resolved "https://registry.yarnpkg.com/@mantine/notifications/-/notifications-7.6.2.tgz#d09577e7b8ef2da07bc256ce9c9029f135450181"
-  integrity sha512-vLs6Y5nnxHipGkA5TSsxgjeus0N9uS+0+E9KZ5OG5QEtz7BdOsKPtNmytsQzBN8P8fjttFImhhoSUOLpYv0xtA==
+"@mantine/notifications@^7.7.1":
+  version "7.7.1"
+  resolved "https://registry.yarnpkg.com/@mantine/notifications/-/notifications-7.7.1.tgz#f004fe608413b418712d8119793b557e845099c9"
+  integrity sha512-UGs3r4CU2hy1Vt0TVtdorDufpI7LWCd4P7qZP0US+mXVeeZqHkNTCiwRTwlledhfaIdqERmmQn9OD2lJu8Wblg==
   dependencies:
-    "@mantine/store" "7.6.2"
+    "@mantine/store" "7.7.1"
     react-transition-group "4.4.5"
 
-"@mantine/store@7.6.2":
-  version "7.6.2"
-  resolved "https://registry.yarnpkg.com/@mantine/store/-/store-7.6.2.tgz#89f9d8bc99f834a85b8adcfb8c1316df69416e78"
-  integrity sha512-IEGbyIs7LIXYQtjR87GQPiw12klgsiKiqplGu9LekJb8uW/7XSRNs31ggqKmdF+cMWO/WyQhEXZdpWNib6tVOw==
+"@mantine/store@7.7.1":
+  version "7.7.1"
+  resolved "https://registry.yarnpkg.com/@mantine/store/-/store-7.7.1.tgz#c1e197777651e1140df63b838f282a9e9c2aa98d"
+  integrity sha512-dmuCOLCFlVHYhZARFsi5YckFQR2Vr4giOgs0X1hczqCVUnRDRIgRusAO5GjUhQrtNxfN0EWwFywjLdcrLkA6Lg==
 
 "@mantinex/mantine-logo@^1.0.1":
   version "1.0.1"

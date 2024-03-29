@@ -3,17 +3,16 @@ import { useState, useEffect } from 'react';
 import { Container, Title, Text, Divider } from '@mantine/core';
 import useAuthStore, { UserData } from '../../Store/authStore';
 
-
 const TransliteRole = (role: string) => {
-    switch (role) {
-        case 'administrator':
-            return 'Администратор';
-        case 'teacher':
-            return 'Учитель';
-        case 'student':
-            return 'Студент';
-    }
-}
+  switch (role) {
+    case 'administrator':
+      return 'Администратор';
+    case 'teacher':
+      return 'Учитель';
+    case 'student':
+      return 'Студент';
+  }
+};
 
 const Account: FC = () => {
   const [user, setUser] = useState<UserData | null>(null);
@@ -52,6 +51,12 @@ const Account: FC = () => {
           Роль: {TransliteRole(user.role)}
           <br />
           Source: {user.source}
+          {user.role === 'student' && (
+            <>
+              <br />
+              Группа: {user.group_name}
+            </>
+          )}
         </Text>
       )}
     </Container>

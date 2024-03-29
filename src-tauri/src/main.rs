@@ -10,7 +10,7 @@ use crate::{
     admin::admin::{
         create_student, create_teacher, fetch_student_details, fetch_students,
         fetch_teacher_details, fetch_teachers, remove_student, remove_teacher,
-        fetch_groups, create_group, DbPool as AdminPool,
+        fetch_groups, create_group, create_timetable_entry, fetch_timetable_entries, delete_timetable_entry, DbPool as AdminPool,
     },
     auth::auth::{authenticate_user, register_student, DbPool as AuthPool},
     database::{create_admins::create_administrator, create_tables::create_tables},
@@ -57,6 +57,9 @@ async fn main() {
             fetch_teacher_details,
             create_teacher,
             remove_teacher,
+            create_timetable_entry,
+            fetch_timetable_entries,
+            delete_timetable_entry,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

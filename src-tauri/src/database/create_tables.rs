@@ -114,11 +114,11 @@ pub async fn create_tables(pool: &Pool<Postgres>) -> Result<(), Error> {
             id SERIAL PRIMARY KEY,
             date DATE NOT NULL,
             time TIME NOT NULL,
-            type class_type NOT NULL,
+            ctype VARCHAR(100) NOT NULL,
             teacher_id INTEGER REFERENCES teachers(id) ON DELETE CASCADE,
             group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
             created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-        );",
+        );"
     )
     .execute(pool)
     .await?;

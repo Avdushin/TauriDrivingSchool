@@ -22,6 +22,9 @@ export enum AdminPaths {
   StudentDetails = '/student/:studentId',
   AddStudent = '/addstudent',
   AddGroup = '/addgroup',
+  //? TimeTable
+  TimeTable = '/alltimetable',
+  AddTimeTable = '/addtimetable',
   //? Teachers
   TeachersList = '/teacherslist',
   TeacherDetails = '/teacher/:teacherId',

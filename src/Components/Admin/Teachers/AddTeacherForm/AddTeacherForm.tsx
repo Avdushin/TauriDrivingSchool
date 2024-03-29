@@ -79,6 +79,7 @@ const AddTeacherForm = () => {
           label='Телефон'
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+          maxLength={11}
         />
         <Group mt='md'>
           <Button type='submit'>Добавить инструктора</Button>

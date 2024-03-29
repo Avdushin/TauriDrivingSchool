@@ -4,6 +4,7 @@ import { MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { App } from './Components';
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 
 const theme = createTheme({
   fontFamily: 'Open Sans, sans-serif',
