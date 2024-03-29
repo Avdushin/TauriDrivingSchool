@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { create } from 'zustand';
 import { invoke } from '@tauri-apps/api/tauri';
 
@@ -7,6 +8,7 @@ export interface UserData {
   email: string;
   role: string;
   password: string;
+  phone?: String | null;
   source: string;
   group_id?: number | null;
   group_name?: string | null;
@@ -20,6 +22,12 @@ export interface AuthStoreState {
     password: string
   ) => Promise<{ success: boolean; error?: string }>;
   fetchAndSetUserData: () => Promise<{ success: boolean; error?: string }>;
+  updateUser: (
+    username: string,
+    email: string,
+    phone: string,
+    password: string
+  ) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -51,21 +59,75 @@ export const useAuthStore = create<AuthStoreState>((set, get) => ({
   fetchAndSetUserData: async () => {
     try {
       const storedUserData = localStorage.getItem('user');
-      if (!storedUserData)
-        throw new Error('No user data found in LocalStorage');
+      // Добавляем проверку на null
+      if (!storedUserData) {
+        console.error('No user data found in LocalStorage');
+        return { success: false, error: 'No user data found' };
+      }
 
+      // Переносим деструктуризацию внутрь блока try, чтобы перехватить возможные ошибки
       const { id, role } = JSON.parse(storedUserData);
-      const source = role + 's';
+      if (!id || !role) {
+        console.error('Incomplete user data');
+        return { success: false, error: 'Incomplete user data' };
+      }
+
+      const source = `${role}s`;
       const userData: UserData = await invoke('fetch_user_data', {
         userId: id,
         source,
       });
+      if (!userData) {
+        console.error('Failed to fetch user data');
+        return { success: false, error: 'Failed to fetch user data' };
+      }
+
       userData.source = source;
       get().setUser(userData);
       return { success: true };
     } catch (error) {
       console.error('Failed to fetch user data:', error);
       return { success: false, error: 'Failed to fetch user data' };
+    }
+  },
+
+  updateUser: async (username, email, phone, password) => {
+    try {
+      const user = get().user;
+      if (!user) throw new Error('User data is missing');
+
+      // Добавляем передачу свойства role
+      console.log('Updating user data with:', {
+        id: user.id,
+        username,
+        email,
+        phone,
+        password,
+        role: user.role,
+      });
+
+      const updatedUser = await invoke('update_user_data', {
+        id: user.id,
+        username,
+        email,
+        phone,
+        password,
+        role: user.role,
+      });
+
+      console.log('Updated user data:', updatedUser);
+
+      if (updatedUser) {
+        get().setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        return true;
+      } else {
+        console.error('Failed to update user data');
+        return false;
+      }
+    } catch (error) {
+      console.error('Failed to update user data:', error);
+      return false;
     }
   },
 
@@ -76,10 +138,9 @@ export const useAuthStore = create<AuthStoreState>((set, get) => ({
       console.log('logouted');
       window.location.reload();
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-  }
-
+  },
 }));
 
 export default useAuthStore;

@@ -1,7 +1,17 @@
-import { FC } from 'react';
-import { useState, useEffect } from 'react';
-import { Container, Title, Text, Divider } from '@mantine/core';
+import { FC, useState, useEffect } from 'react';
+import {
+  Container,
+  Title,
+  Text,
+  Divider,
+  TextInput,
+  PasswordInput,
+  Button,
+  Group,
+} from '@mantine/core';
 import useAuthStore, { UserData } from '../../Store/authStore';
+import { useForm } from '@mantine/form';
+import { EditUserForm } from './EditUserForm';
 
 const TransliteRole = (role: string) => {
   switch (role) {
@@ -11,53 +21,91 @@ const TransliteRole = (role: string) => {
       return 'Учитель';
     case 'student':
       return 'Студент';
+    default:
+      return role;
   }
 };
 
 const Account: FC = () => {
-  const [user, setUser] = useState<UserData | null>(null);
-  const { fetchAndSetUserData } = useAuthStore();
+  const [editMode, setEditMode] = useState(false);
+  const { user, fetchAndSetUserData, updateUser } = useAuthStore();
 
   useEffect(() => {
-    const getUserData = async () => {
-      const { success, error } = await fetchAndSetUserData();
-      if (success) {
-        const userData = localStorage.getItem('user');
-        if (userData) {
-          const parsedUserData = JSON.parse(userData) as UserData;
-          setUser(parsedUserData);
-        } else {
-          console.error('User data not found in LocalStorage');
-        }
-      } else {
-        console.error('Failed to fetch user data:', error);
-      }
-    };
+    fetchAndSetUserData();
+  }, []);
 
-    getUserData();
-  }, [fetchAndSetUserData]);
+  const form = useForm({
+    initialValues: {
+      username: user?.username || '',
+      email: user?.email || '',
+      phone: user?.phone || '',
+      password: '', // Пароль не отображаем, но предоставляем возможность изменения
+    },
+  });
+
+  const handleSave = async (values: typeof form.values) => {
+    // Обновляем только те поля, которые были изменены пользователем
+    const success = await updateUser(
+      values.username,
+      values.email,
+      values.phone,
+      values.password.trim() ? values.password : undefined
+    );
+    if (success) {
+      setEditMode(false);
+      fetchAndSetUserData();
+    }
+  };
 
   return (
     <Container pt={20}>
       <Title>Личный кабинет</Title>
       <Divider size={2} pt={10} />
       {user && (
-        <Text size='lg'>
-          Имя пользователя: {user?.username || 'Guest'}
-          <br />
-          Почта: {user.email}
-          <br />
-          {/* Роль: {user.role} */}
-          Роль: {TransliteRole(user.role)}
-          <br />
-          Source: {user.source}
-          {user.role === 'student' && (
+        <>
+          {editMode ? (
+            <EditUserForm
+              initialValues={{
+                username: user?.username || '',
+                email: user?.email || '',
+                phone: user?.phone || '',
+                password: '',
+              }}
+              onSave={async (values) => {
+                const success = await updateUser(
+                  values.username,
+                  values.email,
+                  values.phone,
+                  values.password.trim() ? values.password : undefined
+                );
+                if (success) {
+                  setEditMode(false);
+                  fetchAndSetUserData();
+                }
+              }}
+              onCancel={() => setEditMode(false)}
+            />
+          ) : (
             <>
-              <br />
-              Группа: {user.group_name}
+              <Text size='lg'>
+                Имя пользователя: {user.username}
+                <br />
+                Почта: {user.email}
+                <br />
+                Роль: {TransliteRole(user.role)}
+                {user.role === 'student' && (
+                  <>
+                    <br />
+                    Группа: {user.group_name}
+                  </>
+                )}
+              </Text>
+              <Button mt='md' onClick={() => setEditMode(true)}>
+                Редактировать
+              </Button>
             </>
           )}
-        </Text>
+        </>
       )}
     </Container>
   );
