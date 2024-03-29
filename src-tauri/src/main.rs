@@ -14,7 +14,7 @@ use crate::{
     },
     auth::auth::{authenticate_user, register_student, DbPool as AuthPool},
     database::{create_admins::create_administrator, create_tables::create_tables},
-    user::user::{fetch_timetable, fetch_user_data, DbPool as UserPool},
+    user::user::{fetch_timetable, fetch_user_data, fetch_teacher_timetable, DbPool as UserPool},
 };
 use sqlx::postgres::PgPoolOptions;
 use std::env;
@@ -55,6 +55,7 @@ async fn main() {
             fetch_timetable,
             fetch_teachers,
             fetch_teacher_details,
+            fetch_teacher_timetable,
             create_teacher,
             remove_teacher,
             create_timetable_entry,

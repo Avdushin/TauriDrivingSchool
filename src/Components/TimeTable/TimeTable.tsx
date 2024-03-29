@@ -12,21 +12,25 @@ const TimeTable = () => {
   useEffect(() => {
     const fetchTimetable = async () => {
       try {
-        // Получаем данные пользователя из localStorage
         const userDataString = localStorage.getItem('user');
         if (!userDataString) throw new Error('User data is not available');
 
         const userData = JSON.parse(userDataString);
-        const { group_id: groupId, role: userRole } = userData;
-        setRole(userRole);
+        const { id: userId, role: userRole } = userData;
 
-        // Для администратора расписание не загружаем
-        if (userRole === 'administrator') return;
+        // Определяем команду для вызова на основе роли пользователя
+        let command = 'fetch_timetable';
+        let params = {};
 
-        // Проверяем, что у пользователя есть группа
-        if (!groupId) throw new Error('Group ID is not available');
+        if (userRole === 'teacher') {
+          command = 'fetch_teacher_timetable';
+          params = { teacherId: userId };
+        } else if (userRole === 'student') {
+          if (!userData.group_id) throw new Error('Group ID is not available');
+          params = { groupId: userData.group_id };
+        }
 
-        const data = await invoke('fetch_timetable', { groupId: groupId });
+        const data = await invoke(command, params);
         setTimetable(data);
       } catch (err) {
         console.error('Failed to fetch timetable:', err);
@@ -35,6 +39,17 @@ const TimeTable = () => {
 
     fetchTimetable();
   }, []);
+
+  const translateCtype = (ctype) => {
+    switch (ctype) {
+      case 'theory':
+        return 'Теория';
+      case 'practice':
+        return 'Практика';
+      default:
+        return ctype;
+    }
+  };
 
   if (role === 'administrator') {
     return (
@@ -63,8 +78,9 @@ const TimeTable = () => {
         {timetable.map((entry, index) => (
           <Table.Tr key={index}>
             <Table.Td>{entry.date}</Table.Td>
+            <Table.Td>{entry.date}</Table.Td>
             <Table.Td>{entry.time}</Table.Td>
-            <Table.Td>{entry.ctype}</Table.Td>
+            <Table.Td>{translateCtype(entry.ctype)}</Table.Td>
             <Table.Td>{entry.teacher_name}</Table.Td>
             <Table.Td>{entry.group_name}</Table.Td>
           </Table.Tr>

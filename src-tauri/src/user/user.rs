@@ -14,7 +14,6 @@ pub struct UserData {
     pub group_name: Option<String>,
 }
 
-
 // Получение данных пользователя по id
 #[tauri::command]
 pub async fn fetch_user_data(
@@ -30,19 +29,19 @@ pub async fn fetch_user_data(
             LEFT JOIN groups ON students.group_id = groups.id
             WHERE students.id = $1
             "#
-        },
+        }
         "teachers" => {
             r#"
             SELECT id, username, email, 'teacher' as role, password, NULL::INTEGER AS group_id, NULL::TEXT AS group_name 
             FROM teachers WHERE id = $1
             "#
-        },
+        }
         "administrators" => {
             r#"
             SELECT id, username, email, 'administrator' as role, password, NULL::INTEGER AS group_id, NULL::TEXT AS group_name 
             FROM administrators WHERE id = $1
             "#
-        },
+        }
         _ => return Err("Invalid source".into()),
     };
 
@@ -99,4 +98,36 @@ pub async fn fetch_timetable(
         .map_err(|e| e.to_string())?;
 
     Ok(result)
+}
+
+#[tauri::command]
+pub async fn fetch_teacher_timetable(
+    pool: State<'_, DbPool>,
+    teacher_id: i32,
+) -> Result<Vec<TimetableEntry>, String> {
+    sqlx::query_as::<_, TimetableEntry>(
+        r#"
+        SELECT 
+            timetable.id, 
+            timetable.date, 
+            timetable.time, 
+            timetable.ctype, 
+            teachers.id AS teacher_id, 
+            teachers.username AS teacher_name, 
+            groups.name AS group_name,
+            groups.id AS group_id
+        FROM 
+            timetable
+        JOIN teachers ON timetable.teacher_id = teachers.id
+        JOIN groups ON timetable.group_id = groups.id
+        WHERE 
+            timetable.teacher_id = $1
+        ORDER BY 
+            timetable.date, timetable.time;
+        "#,
+    )
+    .bind(teacher_id)
+    .fetch_all(&pool.0)
+    .await
+    .map_err(|e| e.to_string())
 }
