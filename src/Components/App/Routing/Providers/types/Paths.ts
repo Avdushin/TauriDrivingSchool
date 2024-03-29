@@ -12,7 +12,9 @@ export enum Paths {
     Logout = '/logout',
     Users = '/api/users',
     Account = '/account',
-    Timetable = '/timetable'
+    Settings = '/dashbord/settings',
+    Timetable = '/timetable',
+    Payment = '/payment'
   }
   
 export enum AdminPaths {

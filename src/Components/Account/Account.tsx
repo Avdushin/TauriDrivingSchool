@@ -47,7 +47,6 @@ const Account: FC = () => {
           <br />
           Почта: {user.email}
           <br />
-          {/* Роль: {user.role} */}
           Роль: {TransliteRole(user.role)}
           <br />
           Source: {user.source}
