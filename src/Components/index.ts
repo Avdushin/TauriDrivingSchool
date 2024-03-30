@@ -5,6 +5,7 @@ export { default as Account } from './Account/Account';
 export { default as TimeTable } from './TimeTable/TimeTable';
 export { default as StudentLoginForm } from './Auth/StudentLoginForm/StudentLoginForm';
 export { default as StudentRegistrationForm } from './Auth/StudentRegistration/StudentRegistrationForm';
+export { Settings } from './Settings/Settings.tsx';
 
 //! Admin access
 export { default as Panel } from './Admin/Panel/Panel';
