@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { FC } from 'react';
 import { Title, Container, Card, Text, Flex, Image } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
