@@ -168,6 +168,7 @@ pub async fn fetch_student_details(
     .await
     .map_err(|e| e.to_string())
 }
+
 // Удаление студента
 #[tauri::command]
 pub async fn remove_student(pool: State<'_, DbPool>, student_id: i32) -> Result<(), String> {
@@ -178,6 +179,25 @@ pub async fn remove_student(pool: State<'_, DbPool>, student_id: i32) -> Result<
 
     Ok(())
 }
+
+#[tauri::command]
+pub async fn update_student_group(
+    pool: State<'_, DbPool>,
+    student_id: i32,
+    group_id: Option<i32>,
+) -> Result<(), String> {
+    sqlx::query!(
+        "UPDATE students SET group_id = $1 WHERE id = $2",
+        group_id,
+        student_id
+    )
+    .execute(&pool.0)
+    .await
+    .map_err(|e| e.to_string())?;
+
+    Ok(())
+}
+
 
 #[derive(Debug, Clone, sqlx::FromRow, serde::Serialize, serde::Deserialize)]
 pub struct Group {
@@ -259,7 +279,9 @@ pub struct TimetableEntry {
 }
 
 #[tauri::command]
-pub async fn fetch_timetable_entries(pool: State<'_, DbPool>) -> Result<Vec<TimetableEntry>, String> {
+pub async fn fetch_timetable_entries(
+    pool: State<'_, DbPool>,
+) -> Result<Vec<TimetableEntry>, String> {
     sqlx::query_as::<_, TimetableEntry>(
         r#"
         SELECT timetable.id, timetable.date, timetable.time, timetable.ctype, teachers.username as teacher, groups.name as group
@@ -273,14 +295,16 @@ pub async fn fetch_timetable_entries(pool: State<'_, DbPool>) -> Result<Vec<Time
     .map_err(|e| e.to_string())
 }
 
-
 #[derive(serde::Deserialize)]
 pub struct DeleteTimetableEntry {
-   pub id: i32,
+    pub id: i32,
 }
 
 #[tauri::command]
-pub async fn delete_timetable_entry(pool: State<'_, DbPool>, entry: DeleteTimetableEntry) -> Result<(), String> {
+pub async fn delete_timetable_entry(
+    pool: State<'_, DbPool>,
+    entry: DeleteTimetableEntry,
+) -> Result<(), String> {
     sqlx::query!("DELETE FROM timetable WHERE id = $1", entry.id)
         .execute(&pool.0)
         .await

@@ -10,7 +10,8 @@ use crate::{
     admin::admin::{
         create_student, create_teacher, fetch_student_details, fetch_students,
         fetch_teacher_details, fetch_teachers, remove_student, remove_teacher,
-        fetch_groups, create_group, create_timetable_entry, fetch_timetable_entries, delete_timetable_entry, DbPool as AdminPool,
+        fetch_groups, create_group, create_timetable_entry, fetch_timetable_entries, delete_timetable_entry,
+        update_student_group, DbPool as AdminPool,
     },
     auth::auth::{authenticate_user, register_student, DbPool as AuthPool},
     database::{create_admins::create_administrator, create_tables::create_tables},
@@ -47,6 +48,7 @@ async fn main() {
             create_student,
             fetch_students,
             fetch_student_details,
+            update_student_group,
             remove_student,
             fetch_groups,
             create_group,

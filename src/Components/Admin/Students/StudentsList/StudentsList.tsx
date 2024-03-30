@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
 import {
@@ -8,6 +7,7 @@ import {
   Center,
   Container,
   Modal,
+  Select,
   Table,
   Text,
   Title,
@@ -18,11 +18,19 @@ import { AdminPaths } from '../../../App/Routing/Providers/types/Paths';
 import {
   IconUserCancel,
   IconUserFilled,
+  IconArrowRightCircle,
 } from '@tabler/icons-react';
 
 const StudentsList = () => {
   const [students, setStudents] = useState([]);
+  const [groups, setGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState('');
+  const [transferModalOpened, setTransferModalOpened] = useState(false);
+  const [removeModalOpened, setRemoveModalOpened] = useState(false);
+  const [studentToTransfer, setStudentToTransfer] = useState(null);
+  const [studentToDelete, setStudentToDelete] = useState(null);
   const navigate = useNavigate();
+
   const items = [
     { title: 'Панель Администратора', href: AdminPaths.Panel },
     { title: 'Список студентов', href: AdminPaths.StudentsList },
@@ -32,43 +40,55 @@ const StudentsList = () => {
     </Anchor>
   ));
 
-  //@ remove
-  const [modalOpened, setModalOpened] = useState(false);
-  const [studentToDelete, setStudentToDelete] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedStudents = await invoke('fetch_students');
+      const fetchedGroups = await invoke('fetch_groups');
+      setStudents(fetchedStudents);
+      setGroups(
+        fetchedGroups.map((group) => ({
+          value: group.id.toString(),
+          label: group.name,
+        }))
+      );
+    };
+
+    fetchData();
+  }, []);
+
+  const handleTransferClick = (student) => {
+    setStudentToTransfer(student);
+    setTransferModalOpened(true);
+  };
 
   const handleRemoveClick = (student) => {
     setStudentToDelete(student);
-    setModalOpened(true);
+    setRemoveModalOpened(true);
+  };
+
+  const confirmTransfer = async () => {
+    if (studentToTransfer && selectedGroup) {
+      await invoke('update_student_group', {
+        studentId: studentToTransfer.id,
+        groupId: Number(selectedGroup),
+      });
+      setTransferModalOpened(false);
+      setSelectedGroup('');
+      const updatedStudents = await invoke('fetch_students');
+      setStudents(updatedStudents);
+    }
   };
 
   const confirmRemove = async () => {
     if (studentToDelete) {
-      try {
-        await invoke('remove_student', { studentId: studentToDelete.id });
-        const updatedTeachers = students.filter(
-          (t) => t.id !== studentToDelete.id
-        );
-        setStudents(updatedTeachers);
-        alert(`Студент ${studentToDelete.username} успешно отчислен`);
-      } catch (err) {
-        console.error('Failed to remove student:', err);
-      }
+      await invoke('remove_student', { studentId: studentToDelete.id });
+      const updatedStudents = students.filter(
+        (student) => student.id !== studentToDelete.id
+      );
+      setStudents(updatedStudents);
+      setRemoveModalOpened(false);
     }
-    setModalOpened(false);
   };
-
-  useEffect(() => {
-    const fetchTeachers = async () => {
-      try {
-        const data = await invoke('fetch_students');
-        setStudents(data);
-      } catch (err) {
-        console.error('Failed to fetch students:', err);
-      }
-    };
-
-    fetchTeachers();
-  }, []);
 
   return (
     <Container>
@@ -77,55 +97,76 @@ const StudentsList = () => {
       </Title>
       <Breadcrumbs pb={20}>{items}</Breadcrumbs>
       <Modal
-        opened={modalOpened}
-        onClose={() => setModalOpened(false)}
-        title='Подтвердите действие'
+        opened={transferModalOpened}
+        onClose={() => setTransferModalOpened(false)}
+        title='Перевести студента'
       >
-        <Text>
-          Вы уверены, что хотите отчислить студента{' '}
-          <b>{studentToDelete?.username}</b>?
-        </Text>
+        <Select
+          data={groups}
+          value={selectedGroup}
+          onChange={setSelectedGroup}
+          placeholder='Выберите группу'
+        />
         <Center>
-          <Button onClick={confirmRemove} color='red' mt={20}>
-            Уволить
+          <Button onClick={confirmTransfer} mt={20}>
+            Перевести
           </Button>
         </Center>
       </Modal>
-      <Table></Table>
+      <Modal
+        opened={removeModalOpened}
+        onClose={() => setRemoveModalOpened(false)}
+        title='Подтверждение удаления'
+      >
+        <Text>
+          Вы уверены, что хотите удалить студента {studentToDelete?.username}?
+        </Text>
+        <Center>
+          <Button onClick={confirmRemove} color='red' mt={20}>
+            Удалить
+          </Button>
+        </Center>
+      </Modal>
       <Table>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>ID</Table.Th>
-            <Table.Th>Username</Table.Th>
+            <Table.Th>Имя пользователя</Table.Th>
             <Table.Th>Email</Table.Th>
             <Table.Th>Группа</Table.Th>
             <Table.Th>Телефон</Table.Th>
+            <Table.Th>Действия</Table.Th>
           </Table.Tr>
         </Table.Thead>
-        <tbody>
+        <Table.Tbody>
           {students.map((student) => (
-            <Table.Tr key={student.id} style={{ cursor: 'pointer' }}>
+            <Table.Tr key={student.id}>
               <Table.Td>{student.id}</Table.Td>
               <Table.Td>{student.username}</Table.Td>
               <Table.Td>{student.email}</Table.Td>
-              <Table.Td>{student.group_name}</Table.Td>
-              <Table.Td>{student.phone}</Table.Td>
-              <Table.Td onClick={() => navigate(`/student/${student.id}`)}>
-                <Tooltip label='Профиль'>
-                  <IconUserFilled></IconUserFilled>
-                </Tooltip>
-              </Table.Td>
+              <Table.Td>{student.group_name || 'Нет группы'}</Table.Td>
+              <Table.Td>{student.phone || 'Нет данных'}</Table.Td>
               <Table.Td>
-                <Tooltip label='Отчислить'>
+                <Tooltip label='Профиль'>
+                  <IconUserFilled
+                    onClick={() => navigate(`/student/${student.id}`)}
+                  />
+                </Tooltip>
+                <Tooltip label='Перевести'>
+                  <IconArrowRightCircle
+                    onClick={() => handleTransferClick(student)}
+                  />
+                </Tooltip>
+                <Tooltip label='Удалить'>
                   <IconUserCancel
                     color='red'
                     onClick={() => handleRemoveClick(student)}
-                  ></IconUserCancel>
+                  />
                 </Tooltip>
               </Table.Td>
             </Table.Tr>
           ))}
-        </tbody>
+        </Table.Tbody>
       </Table>
     </Container>
   );
