@@ -49,7 +49,7 @@ const StudentsList = () => {
           (t) => t.id !== studentToDelete.id
         );
         setStudents(updatedTeachers);
-        alert(`Учитель ${studentToDelete.username} успешно отчислен`);
+        alert(`Студент ${studentToDelete.username} успешно отчислен`);
       } catch (err) {
         console.error('Failed to remove student:', err);
       }

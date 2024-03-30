@@ -3,7 +3,6 @@ import {
   IconHome2,
   IconUser,
   IconSettings,
-  IconLogin,
   IconCalendarTime,
   IconChessKing,
 } from '@tabler/icons-react';
@@ -15,6 +14,6 @@ export const BarItems = [
   { icon: IconUser, label: 'Аккаунт', href: Paths.Account },
   { icon: IconCalendarTime, label: 'Расписание', href: Paths.Timetable },
   { icon: IconSettings, label: 'Настройки', href: PathsDashboard.Settings },
-  { icon: IconUser, label: 'Регистрация', href: Paths.Signup },
-  { icon: IconLogin, label: 'Авторизация', href: Paths.Login },
+  // { icon: IconUser, label: 'Регистрация', href: Paths.Signup },
+  // { icon: IconLogin, label: 'Авторизация', href: Paths.Login },
 ];
