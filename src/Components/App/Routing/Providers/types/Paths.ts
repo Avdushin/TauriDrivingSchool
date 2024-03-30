@@ -30,7 +30,9 @@ export enum AdminPaths {
   //? Teachers
   TeachersList = '/teacherslist',
   TeacherDetails = '/teacher/:teacherId',
-  AddTeacher = '/addteacher'
+  AddTeacher = '/addteacher',
+  //? Payments
+  AddPayment = '/addpayment'
 }
 
   //@ Route pathes inside the application

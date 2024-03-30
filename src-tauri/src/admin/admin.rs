@@ -312,3 +312,75 @@ pub async fn delete_timetable_entry(
 
     Ok(())
 }
+
+/*
+//     @ Payments
+*/
+
+use bigdecimal::BigDecimal;
+
+#[derive(Debug, Clone, serde::Deserialize, serde::Serialize)]
+pub struct NewPayment {
+    pub student_id: i32,
+    pub amount: BigDecimal,
+    pub ptype: String,
+}
+
+#[tauri::command]
+pub async fn create_payment(pool: State<'_, DbPool>, payment: NewPayment) -> Result<(), String> {
+    let res = sqlx::query!(
+        "INSERT INTO payments (student_id, amount, ctype, date, created_at, status) VALUES ($1, $2, $3, CURRENT_DATE, CURRENT_TIMESTAMP, 'не оплачено')",
+        payment.student_id,
+        payment.amount,
+        payment.ptype,
+    )
+    .execute(&pool.0)
+    .await;
+    
+
+    match res {
+        Ok(_) => Ok(()),
+        Err(e) => Err(e.to_string()),
+    }
+}
+
+#[derive(Debug, Clone, serde::Serialize, sqlx::FromRow)]
+pub struct Payment {
+    pub id: i32,
+    pub student_id: i32,
+    pub amount: BigDecimal,
+    pub ptype: String,
+    pub date: NaiveDate,
+    pub status: String,
+}
+
+#[tauri::command]
+pub async fn fetch_payments(pool: State<'_, DbPool>) -> Result<Vec<Payment>, String> {
+    sqlx::query_as::<_, Payment>(
+        "SELECT id, student_id, amount, ctype AS ptype, date, status FROM payments WHERE status = 'не оплачено'",
+    )
+    .fetch_all(&pool.0)
+    .await
+    .map_err(|e| e.to_string())
+}
+
+
+#[derive(Debug, Clone, serde::Deserialize, serde::Serialize)]
+pub struct PaymentId {
+    pub id: i32,
+}
+
+#[tauri::command]
+pub async fn pay_payment(pool: State<'_, DbPool>, payment_id: PaymentId) -> Result<(), String> {
+    let result = sqlx::query!(
+        "UPDATE payments SET status = 'оплачено' WHERE id = $1",
+        payment_id.id
+    )
+    .execute(&pool.0)
+    .await;
+
+    match result {
+        Ok(_) => Ok(()),
+        Err(e) => Err(e.to_string()),
+    }
+}

@@ -81,8 +81,9 @@ CREATE TABLE IF NOT EXISTS payments (
     student_id INTEGER REFERENCES students(id) ON DELETE SET NULL,
     teacher_id INTEGER REFERENCES teachers(id) ON DELETE SET NULL,
     amount DECIMAL(10, 2) NOT NULL,
-    ctype payment_type NOT NULL,
+    ctype VARCHAR(100) NOT NULL,
     date DATE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(100) DEFAULT 'не оплачено',
     CONSTRAINT chk_payment_owner CHECK (student_id IS NOT NULL OR teacher_id IS NOT NULL)
 );

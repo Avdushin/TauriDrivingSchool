@@ -5,7 +5,7 @@ import { AdminCard } from '../..';
 
 const Panel: FC = () => {
   return (
-    <Container>
+    <Container pb={20}>
       <Title order={1} style={{ textAlign: 'center', paddingTop: '20px' }}>
         Панель Администратора
       </Title>
@@ -58,6 +58,16 @@ const Panel: FC = () => {
           title='Посмотреть расписание'
           description='В данном разделе администратор может посмотреть расписание занятий'
           href={AdminPaths.TimeTable}
+        />
+      </Flex>
+      <Title order={2} pt={40}>
+        Платежи
+      </Title>
+      <Flex justify={'start'} gap={20}>
+        <AdminCard
+          title='Создать платёж'
+          description='В данном разделе администратор может выставить счёт студенту'
+          href={AdminPaths.AddPayment}
         />
       </Flex>
     </Container>

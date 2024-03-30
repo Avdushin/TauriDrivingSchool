@@ -26,5 +26,9 @@ export { default as AddGroupForm } from './Admin/AddGroupForm/AddGroupForm';
 export { default as AddTimetableEntryForm } from './Admin/Timetable/AddTimetableEntryForm/AddTimetableEntryForm';
 export { default as TimeTableViewer } from './Admin/Timetable/TimetableViewer/TimetableViewer';
 
+//@ Payments
+export { default as AddPayment } from './Admin/Students/Payments/AddPayment/AddPayment';
+export { default as PaymentsList } from './Admin/Students/Payments/PaymentsList/PaymentsList.tsx';
+
 //@ Shared Components
 export { AdminCard } from './Shared/AdminCard/AdminCard';
