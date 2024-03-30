@@ -24,8 +24,8 @@ export const AuthGuard = ({ children, isAdmin }: TGuardProps) => {
     return (
       <LoadingOverlay
         visible={true}
-        // zIndex={10000}
-        overlayProps={{ radius: 'lg', blur: 20 }}
+        zIndex={3}
+        overlayProps={{ radius: 'lg' }}
       />
     );
   }
