@@ -355,10 +355,11 @@ pub struct Payment {
 }
 
 #[tauri::command]
-pub async fn fetch_payments(pool: State<'_, DbPool>) -> Result<Vec<Payment>, String> {
+pub async fn fetch_payments(pool: State<'_, DbPool>, user_id: i32) -> Result<Vec<Payment>, String> {
     sqlx::query_as::<_, Payment>(
-        "SELECT id, student_id, amount, ctype AS ptype, date, status FROM payments WHERE status = 'не оплачено'",
+        "SELECT id, student_id, amount, ctype AS ptype, date, status FROM payments WHERE status = 'не оплачено' and student_id = $1",
     )
+    .bind(user_id)
     .fetch_all(&pool.0)
     .await
     .map_err(|e| e.to_string())

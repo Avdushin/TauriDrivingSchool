@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
 import { Table, Container, Title } from '@mantine/core';
+import { useAuthStore } from '../../../../../Store';
 
 const TransliteType = (role: string) => {
     switch (role) {
@@ -14,10 +15,16 @@ const TransliteType = (role: string) => {
 
 const PaymentsList = () => {
   const [payments, setPayments] = useState([]);
+  const uid = useAuthStore((state) => state.user?.id);
+
+  const userDataString = localStorage.getItem('user');
+  if (!userDataString) throw new Error('User data is not available');
+  const userData = JSON.parse(userDataString);
+  const { id: userId, role: userRole } = userData;
 
   const fetchPayments = async () => {
     try {
-      const paymentsData = await invoke('fetch_payments');
+      const paymentsData = await invoke('fetch_payments', { userId: userId });
       setPayments(paymentsData);
     } catch (err) {
       console.error('Failed to fetch payments:', err);

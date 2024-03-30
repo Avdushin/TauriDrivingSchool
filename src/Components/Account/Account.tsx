@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { Container, Title, Text, Divider } from '@mantine/core';
 import useAuthStore, { UserData } from '../../Store/authStore';
+import PaymentsList from './../Admin/Students/Payments/PaymentsList/PaymentsList';
 
 const TransliteRole = (role: string) => {
   switch (role) {
@@ -38,27 +39,30 @@ const Account: FC = () => {
   }, [fetchAndSetUserData]);
 
   return (
-    <Container pt={20}>
-      <Title>Личный кабинет</Title>
-      <Divider size={2} pt={10} />
-      {user && (
-        <Text size='lg'>
-          Имя пользователя: {user?.username || 'Guest'}
-          <br />
-          Почта: {user.email}
-          <br />
-          Роль: {TransliteRole(user.role)}
-          <br />
-          Source: {user.source}
-          {user.role === 'student' && (
-            <>
-              <br />
-              Группа: {user.group_name}
-            </>
-          )}
-        </Text>
-      )}
-    </Container>
+    <>
+      <Container pt={20}>
+        <Title>Личный кабинет</Title>
+        <Divider size={2} pt={10} />
+        {user && (
+          <Text size='lg'>
+            Имя пользователя: {user?.username || 'Guest'}
+            <br />
+            Почта: {user.email}
+            <br />
+            Роль: {TransliteRole(user.role)}
+            <br />
+            Source: {user.source}
+            {user.role === 'student' && (
+              <>
+                <br />
+                Группа: {user.group_name}
+              </>
+            )}
+          </Text>
+        )}
+      </Container>
+      <PaymentsList />
+    </>
   );
 };
 
