@@ -3,13 +3,17 @@ use bcrypt::{hash, DEFAULT_COST};
 
 use sqlx::{Error, PgPool};
 
+const ADMIN_USERNAME: &'static str = "admin";
+const ADMIN_EMAIL: &'static str = "admin@example.com";
+const ADMIN_PASSWORD: &'static str = "admin123";
+
 pub async fn create_administrator(pool: &PgPool) -> Result<(), Error> {
     let admin_username =
-        env::var("ADMIN_USERNAME").expect("ADMIN_USERNAME должен быть установлен в файле .env");
+        env::var("ADMIN_USERNAME").unwrap_or(ADMIN_USERNAME.to_string());
     let admin_email =
-        env::var("ADMIN_EMAIL").expect("ADMIN_EMAIL должен быть установлен в файле .env");
+        env::var("ADMIN_EMAIL").unwrap_or(ADMIN_EMAIL.to_string());
     let admin_password =
-        env::var("ADMIN_PASSWORD").expect("ADMIN_PASSWORD должен быть установлен в файле .env");
+        env::var("ADMIN_PASSWORD").unwrap_or(ADMIN_PASSWORD.to_string());
 
     //? Хэшируем пароль
     let hashed_password = match hash(&admin_password, DEFAULT_COST) {

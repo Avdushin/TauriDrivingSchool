@@ -20,10 +20,12 @@ use crate::{
 use sqlx::postgres::PgPoolOptions;
 use std::env;
 
+const DB_URL: &'static str = "postgres://fnwiljgv:8eL5Wf8QL9EboXVmHk_bAF3SEhlgGhOV@bubble.db.elephantsql.com/fnwiljgv";
+
 #[tokio::main]
 async fn main() {
     dotenv::dotenv().ok();
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let database_url = env::var("DATABASE_URL").unwrap_or((&DB_URL).to_string());
 
     let pool = PgPoolOptions::new()
         .connect(&database_url)
