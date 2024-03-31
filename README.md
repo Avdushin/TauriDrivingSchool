@@ -12,7 +12,7 @@
 ![](./public/prev/login.png)
 
 ### Личный кабинет
-![](./public/prev/acacount.png)
+![](./public/prev/account.png)
 
 ### Панель администратора
 ![](./public/prev/admin.png)
@@ -22,6 +22,19 @@
 
 ### Платежи
 ![](./public/prev/payments.png)
+
+## Development
+
+### Start dev mode
+```bash
+make
+```
+
+### Build Application
+
+```bash
+make build
+```
 
 ## Dependencies
 
