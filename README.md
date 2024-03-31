@@ -3,21 +3,25 @@
 ### Stack: Tauri Rust + React + TypeScript + Vite
 
 ### Главная страница
-![](./dist/prev/image_1.png)
-
+![](./public/prev/home.png)
 
 ### Регистрация
-![](./dist/prev/register.png)
+![](./public/prev/register.png)
 
 ### Авторизация
-![](./dist/prev/login.png)
+![](./public/prev/login.png)
 
 ### Личный кабинет
-![](./dist/prev/image_3.png)
+![](./public/prev/acacount.png)
 
 ### Панель администратора
-![](./dist/prev/image_2.png)
+![](./public/prev/admin.png)
 
+### Расписание
+![](./public/prev/timetable.png)
+
+### Платежи
+![](./public/prev/payments.png)
 
 ## Dependencies
 

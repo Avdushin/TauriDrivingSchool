@@ -20,7 +20,6 @@ export const AuthGuard = ({ children, isAdmin }: TGuardProps) => {
   }, [isAuthLocalStorage, user, fetchAndSetUserData]);
 
   if (isAuthLocalStorage && !user) {
-    // return <p>loading...</p>
     return (
       <LoadingOverlay
         visible={true}
