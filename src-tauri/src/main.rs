@@ -7,20 +7,16 @@ mod database;
 mod user;
 
 use crate::{
-    admin::admin::{
-        create_student, create_teacher, fetch_student_details, fetch_students,
-        fetch_teacher_details, fetch_teachers, remove_student, remove_teacher,
-        fetch_groups, create_group, create_timetable_entry, fetch_timetable_entries, delete_timetable_entry,
-        update_student_group, create_payment, fetch_payments, pay_payment, DbPool as AdminPool,
-    },
-    auth::auth::{authenticate_user, register_student, DbPool as AuthPool},
+    admin::admin::{DbPool as AdminPool, *},
+    auth::auth::{DbPool as AuthPool, *},
     database::{create_admins::create_administrator, create_tables::create_tables},
-    user::user::{fetch_timetable, fetch_user_data, fetch_teacher_timetable, DbPool as UserPool},
+    user::user::{DbPool as UserPool, *},
 };
 use sqlx::postgres::PgPoolOptions;
 use std::env;
 
-const DB_URL: &'static str = "postgres://fnwiljgv:8eL5Wf8QL9EboXVmHk_bAF3SEhlgGhOV@bubble.db.elephantsql.com/fnwiljgv";
+const DB_URL: &'static str =
+    "postgres://fnwiljgv:8eL5Wf8QL9EboXVmHk_bAF3SEhlgGhOV@bubble.db.elephantsql.com/fnwiljgv";
 
 #[tokio::main]
 async fn main() {
