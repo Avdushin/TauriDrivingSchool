@@ -30,6 +30,11 @@
 make
 ```
 
+### Start dev mode from linux
+```bash
+make linux
+```
+
 ### Build Application
 
 ```bash
