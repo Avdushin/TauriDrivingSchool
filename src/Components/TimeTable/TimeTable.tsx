@@ -76,17 +76,16 @@ const TimeTable = () => {
         <Table>
           <Table.Thead>
             <Table.Tr>
-              <Table.Th>Date</Table.Th>
-              <Table.Th>Time</Table.Th>
-              <Table.Th>Type</Table.Th>
-              <Table.Th>Teacher</Table.Th>
-              <Table.Th>Group</Table.Th>
+              <Table.Th>Дата</Table.Th>
+              <Table.Th>Время</Table.Th>
+              <Table.Th>Тип занятия</Table.Th>
+              <Table.Th>Инструктор</Table.Th>
+              <Table.Th>Группа</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
             {timetable.map((entry, index) => (
               <Table.Tr key={index}>
-                <Table.Td>{entry.date}</Table.Td>
                 <Table.Td>{entry.date}</Table.Td>
                 <Table.Td>{entry.time}</Table.Td>
                 <Table.Td>{translateCtype(entry.ctype)}</Table.Td>

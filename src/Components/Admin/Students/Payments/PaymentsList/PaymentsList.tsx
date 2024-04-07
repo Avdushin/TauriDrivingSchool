@@ -45,38 +45,38 @@ const PaymentsList = () => {
     fetchPayments();
   }, []);
 
-  return (
-    <Container>
-      <Title order={1} pt={20} pb={20}>
-        Список счетов
-      </Title>
-      <Table striped highlightOnHover>
-        <Table.Thead>
-          <Table.Tr>
-            {/* <Table.Th>ID</Table.Th> */}
-            {/* <Table.Th>Student ID</Table.Th> */}
-            <Table.Th>Дата</Table.Th>
-            <Table.Th>Тип</Table.Th>
-            <Table.Th>Цена</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <tbody>
-          {payments.map((payment) => (
-            <Table.Tr key={payment.id}>
-              {/* <Table.Td>{payment.id}</Table.Td>
-              <Table.Td>{payment.student_id}</Table.Td> */}
-              <Table.Td>{payment.date}</Table.Td>
-              <Table.Td>{TransliteType(payment.ptype)}</Table.Td>
-              <Table.Td>{payment.amount.toString()}</Table.Td>
-              <Table.Td>
-                <button onClick={() => handlePay(payment.id)}>Оплатить</button>
-              </Table.Td>
+  if (payments > 0) {
+    return (
+      <Container>
+        <Title order={1} pt={20} pb={20}>
+          Список счетов
+        </Title>
+        <Table striped highlightOnHover>
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>Дата</Table.Th>
+              <Table.Th>Тип</Table.Th>
+              <Table.Th>Цена</Table.Th>
             </Table.Tr>
-          ))}
-        </tbody>
-      </Table>
-    </Container>
-  );
+          </Table.Thead>
+          <tbody>
+            {payments.map((payment) => (
+              <Table.Tr key={payment.id}>
+                <Table.Td>{payment.date}</Table.Td>
+                <Table.Td>{TransliteType(payment.ptype)}</Table.Td>
+                <Table.Td>{payment.amount.toString()}</Table.Td>
+                <Table.Td>
+                  <button onClick={() => handlePay(payment.id)}>Оплатить</button>
+                </Table.Td>
+              </Table.Tr>
+            ))}
+          </tbody>
+        </Table>
+      </Container>
+    );
+  } else {
+    return
+  }
 };
 
 export default PaymentsList;
