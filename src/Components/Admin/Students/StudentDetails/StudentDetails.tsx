@@ -12,7 +12,7 @@ const StudentDetails: FC = () => {
   const items = [
     { title: 'Панель Администратора', href: AdminPaths.Panel },
     { title: 'Список студентов', href: AdminPaths.StudentsList },
-    { title: 'Данные об студенте', href: ''},
+    { title: 'Данные о студенте', href: ''},
   ].map((item, index) => (
     <Anchor href={item.href} key={index}>
       {item.title}
@@ -39,7 +39,7 @@ const StudentDetails: FC = () => {
   return (
     <Container shadow='xs' p='md'>
       <Title order={1} pt={20} pb={20}>
-        Данные об инструкторе
+        Данные о студенте
       </Title>
       <Breadcrumbs pb={20}>{items}</Breadcrumbs>
       <Divider pb={20} />
